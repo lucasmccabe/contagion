@@ -50,7 +50,7 @@ which produces the following simple compartmental history plot:
 
 ![Sample Simulation Compartmental Histories](https://raw.githubusercontent.com/lucasmccabe/contagion/dev/images/Sample%20Simulation%20Compartmental%20Histories.png)
 
-Perhaps we want to differentiate between symptomatic and asymptomatic infections. For this, we simply add two arguments:
+Perhaps we want to differentiate between symptomatic and asymptomatic infections. For this, we add two arguments:
 
 ```python
 sim = contagion.Contagion(network = network,
@@ -63,7 +63,7 @@ sim.plot_simulation(steps = 100)
 
 which generates the following:
 
-![Sample Simulation Compartmental Histories](https://raw.githubusercontent.com/lucasmccabe/contagion/dev/images/Sample%20Simulation%20Compartmental%20Histories.png)
+![Sample Simulation Compartmental Histories with Symptomatic Tracking](https://github.com/lucasmccabe/contagion/blob/dev/images/Sample%20Simulation%20Compartmental%20Histories%20with%20Symptomatic%20Tracking.pngg)
 
 
 ## Requirements
