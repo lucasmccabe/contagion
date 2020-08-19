@@ -63,7 +63,7 @@ sim.plot_simulation(steps = 100)
 
 which generates the following:
 
-![Sample Simulation Compartmental Histories with Symptomatic Tracking](https://github.com/lucasmccabe/contagion/blob/dev/images/Sample%20Simulation%20Compartmental%20Histories%20with%20Symptomatic%20Tracking.pngg)
+![Sample Simulation Compartmental Histories with Symptomatic Tracking](https://raw.githubusercontent.com/lucasmccabe/contagion/dev/images/Sample%20Simulation%20Compartmental%20Histories%20with%20Symptomatic%20Tracking.png)
 
 
 ## Requirements
