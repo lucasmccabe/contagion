@@ -48,7 +48,7 @@ sim.plot_simulation(steps = 100)
 
 which produces the following simple compartmental history plot:
 
-[Sample Simulation Compartmental Histories](lucasmccabe.github.com/contagion/images/Sample Simulation Compartmental Histories.png)
+![Sample Simulation Compartmental Histories](https://raw.githubusercontent.com/lucasmccabe/contagion/dev/images/Sample%20Simulation%20Compartmental%20Histories.png)
 
 ## Requirements
 This project was created with:
