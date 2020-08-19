@@ -3,11 +3,11 @@
 ## Introduction
 `contagion` is a Python package supporting agent-based disease simulation on networks.
 
-
 ## Table of Contents
 * [Introduction](#introduction)
 * [Table of Contents](#table-of-contents)
 * [General Info](#general-info)
+* [Installation](#installation)
 * [Usage](#usage)
 * [Requirements](#requirements)
 * [License](#license)
@@ -15,7 +15,15 @@
 ## General Info
 `contagion`
 
+## Installation
+In the future, we'll use [pip](https://pip.pypa.io/en/stable/) to install `contagion` (but not yet).
+
+```bash
+pip install contagion
+```
+
 ## Usage
+
 
 ## Requirements
 This project was created with:
