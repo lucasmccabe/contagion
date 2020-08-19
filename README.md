@@ -48,7 +48,7 @@ sim.plot_simulation(steps = 100)
 
 which produces the following simple compartmental history plot:
 
-[Sample Simulation Compartmental Histories](images\Sample Simulation Compartmental Histories.png)
+![Sample Simulation Compartmental Histories](images\Sample Simulation Compartmental Histories.png)
 
 ## Requirements
 This project was created with:
