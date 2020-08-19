@@ -13,17 +13,41 @@
 * [License](#license)
 
 ## General Info
-`contagion`
+`contagion` consists of two primary components:
+- `ContactNetwork` builds upon a networkx graph, adding vectors for tracking susceptible, infected, and recovered nodes and providing the ability to initialize with a specified fraction of nodes infected and/or recovered.
+- `Contagion` implements disease simulations on contact networks, providing the ability to retrieve per-step compartmental histories and simulate test procedures (e.g. random testing or contact tracing).
 
 ## Installation
-In the future, we'll use [pip](https://pip.pypa.io/en/stable/) to install `contagion` (but not yet).
+In the future, we'll use [pip](https://pip.pypa.io/en/stable/) to install `contagion` (but not yet):
 
 ```bash
 pip install contagion
 ```
 
-## Usage
+Once `contagion` is installed, import `networkx` and `contagion`:
 
+```python
+import networkx
+from contagion import contagion
+```
+
+## Usage
+We can initialize a `ContactNetwork` using any `networkx` graph:
+
+```python
+G = networkx.barabasi_albert_graph(1000, 25)
+network = contagion.ContactNetwork(G,
+                        fraction_infected = 0.01)
+```
+
+Once a `ContactNetwork` is initialized, we can run a disease simulation:
+
+```python
+sim = contagion.Contagion(network = network,
+                        beta = 0.2,
+                        gamma = 0.1)
+sim.plot_simulation(steps = 100)
+```
 
 ## Requirements
 This project was created with:
