@@ -36,18 +36,19 @@ We can initialize a `ContactNetwork` using any `networkx` graph:
 
 ```python
 G = networkx.barabasi_albert_graph(1000, 25)
-network = contagion.ContactNetwork(G,
-                        fraction_infected = 0.01)
+network = contagion.ContactNetwork(G, fraction_infected = 0.01)
 ```
 
 Once a `ContactNetwork` is initialized, we can run a disease simulation:
 
 ```python
-sim = contagion.Contagion(network = network,
-                        beta = 0.2,
-                        gamma = 0.1)
+sim = contagion.Contagion(network = network, beta = 0.2, gamma = 0.1)
 sim.plot_simulation(steps = 100)
 ```
+
+which produces the following simple compartmental history plot:
+
+[Sample Simulation Compartmental Histories](images\Sample Simulation Compartmental Histories.png)
 
 ## Requirements
 This project was created with:
