@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3993315.svg)](https://doi.org/10.5281/zenodo.3993315)
+
 # contagion
 
 > `contagion` is a Python package supporting agent-based disease simulation on networks.
@@ -55,7 +57,9 @@ which produces the following simple compartmental history plot:
 ![Sample Simulation Compartmental Histories with Symptomatic Tracking](https://raw.githubusercontent.com/lucasmccabe/contagion/dev/images/Sample%20Simulation%20Compartmental%20Histories%20with%20Symptomatic%20Tracking.png)
 
 ## Citing contagion
-TBD
+If you found `contagion` useful in your work, please use the [Zenodo](https://zenodo.org/record/3993315) software citation:
+
+> Lucas McCabe. (2020, August 20). lucasmccabe/contagion: contagion v1.0.0 (Version 1.0.0). Zenodo. http://doi.org/10.5281/zenodo.3993315
 
 ## Contact
 - Lucas McCabe ([lucas.mccabe@jhu.edu](mailto:lucas.mccabe@jhu.edu))
