@@ -20,7 +20,7 @@
 - `Contagion` implements disease simulations on contact networks, providing the ability to retrieve per-step compartmental histories and simulate test procedures (e.g. random testing or contact tracing).
 
 ## Installation
-Install `contagion` with [pip](https://pip.pypa.io/en/stable/):
+Install `contagion` with [pip](https://pypi.org/project/contagion/):
 
 ```bash
 pip install contagion
