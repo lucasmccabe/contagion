@@ -7,8 +7,8 @@
 * [General Info](#general-info)
 * [Installation](#installation)
 * [Usage](#usage)
-* [Contact](#contact)
 * [Citing contagion](#citing-contagion)
+* [Contact](#contact)
 * [Requirements](#requirements)
 * [License](#license)
 
@@ -54,11 +54,11 @@ which produces the following simple compartmental history plot:
 
 ![Sample Simulation Compartmental Histories with Symptomatic Tracking](https://raw.githubusercontent.com/lucasmccabe/contagion/dev/images/Sample%20Simulation%20Compartmental%20Histories%20with%20Symptomatic%20Tracking.png)
 
-## Contact
-- Lucas McCabe ([lucas.mccabe@jhu.edu](mailto:lucas.mccabe@jhu.edu))
-
 ## Citing contagion
 TBD
+
+## Contact
+- Lucas McCabe ([lucas.mccabe@jhu.edu](mailto:lucas.mccabe@jhu.edu))
 
 ## Requirements
 This project was created with:
