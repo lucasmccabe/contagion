@@ -27,20 +27,20 @@ class ContactNetwork():
 		Constructor for the ContactNetwork class.
 
 		Parameters:
-		G: a networkx graph
-		fraction_infected: portion of the population infected at
-		initialization
-		fraction_recovered: portion of the population recovered at
-		initialization
+			G: a networkx graph
+			fraction_infected: portion of the population infected at
+				initialization
+			fraction_recovered: portion of the population recovered at
+				initialization
 		Initializes:
-		A: adjacency matrix for the graph G
-		n: number of individuals in population
-		fraction_infected: as above, portion of the population infected at
-		initialization. If fraction_infected == 0, one node is infected
-		at initialization.
-		Su: vector of susceptible nodes
-		In: vector of infected nodes
-		Re: vector of recovered nodes
+			A: adjacency matrix for the graph G
+			n: number of individuals in population
+			fraction_infected: as above, portion of the population infected at
+				initialization. If fraction_infected == 0, one node is infected
+				at initialization.
+			Su: vector of susceptible nodes
+			In: vector of infected nodes
+			Re: vector of recovered nodes
 		"""
 		self.A = nx.adjacency_matrix(G).todense()
 		self.n = len(self.A)
@@ -105,12 +105,12 @@ class Contagion():
 				contagion_type: either "sir" or "sis"
 				beta: infection rate for susceptible nodes
 				gamma: recovery rate for an infected node
-				save_history: describes whether to save susceptible, infected, and
-					recovered histories for each time step
-				track_symptomatic: describes whether to simulate the emergence of
-					symptoms for modeling testing
+				save_history: describes whether to save susceptible, infected,
+					and recovered histories for each time step
+				track_symptomatic: describes whether to simulate the emergence
+					of symptoms for modeling testing
 				psi: the rate at which infected nodes become symptomatic
-					implement_testing: describes whether to simulate testing of the
+				implement_testing: describes whether to simulate testing of the
 					symptomatic population
 				testing_type: describes what testing strategy to use.
 				test_rate: portion(s) of nodes from population to test randomly.

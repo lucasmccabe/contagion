@@ -1,14 +1,14 @@
 # contagion
 
-## Introduction
-`contagion` is a Python package supporting agent-based disease simulation on networks.
+> `contagion` is a Python package supporting agent-based disease simulation on networks.
 
 ## Table of Contents
-* [Introduction](#introduction)
 * [Table of Contents](#table-of-contents)
 * [General Info](#general-info)
 * [Installation](#installation)
 * [Usage](#usage)
+* [Citing contagion](#citing-contagion)
+* [Contact](#contact)
 * [Requirements](#requirements)
 * [License](#license)
 
@@ -18,7 +18,7 @@
 - `Contagion` implements disease simulations on contact networks, providing the ability to retrieve per-step compartmental histories and simulate test procedures (e.g. random testing or contact tracing).
 
 ## Installation
-In the future, we'll use [pip](https://pip.pypa.io/en/stable/) to install `contagion` (but not yet):
+Install `contagion` with [pip](https://pip.pypa.io/en/stable/):
 
 ```bash
 pip install contagion
@@ -39,18 +39,7 @@ G = networkx.barabasi_albert_graph(1000, 25)
 network = contagion.ContactNetwork(G, fraction_infected = 0.01)
 ```
 
-Once a `ContactNetwork` is initialized, we can run a disease simulation:
-
-```python
-sim = contagion.Contagion(network = network, beta = 0.2, gamma = 0.1)
-sim.plot_simulation(steps = 100)
-```
-
-which produces the following simple compartmental history plot:
-
-![Sample Simulation Compartmental Histories](https://raw.githubusercontent.com/lucasmccabe/contagion/dev/images/Sample%20Simulation%20Compartmental%20Histories.png)
-
-Perhaps we want to differentiate between symptomatic and asymptomatic infections. For this, we add two arguments:
+Once a `ContactNetwork` is initialized, we can run a disease simulation. For this example, we'll also differentiate between symptomatic and asymptomatic infections:
 
 ```python
 sim = contagion.Contagion(network = network,
@@ -61,10 +50,15 @@ sim = contagion.Contagion(network = network,
 sim.plot_simulation(steps = 100)
 ```
 
-which generates the following:
+which produces the following simple compartmental history plot:
 
 ![Sample Simulation Compartmental Histories with Symptomatic Tracking](https://raw.githubusercontent.com/lucasmccabe/contagion/dev/images/Sample%20Simulation%20Compartmental%20Histories%20with%20Symptomatic%20Tracking.png)
 
+## Citing contagion
+TBD
+
+## Contact
+- Lucas McCabe ([lucas.mccabe@jhu.edu](mailto:lucas.mccabe@jhu.edu))
 
 ## Requirements
 This project was created with:
