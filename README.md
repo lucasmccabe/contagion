@@ -47,11 +47,11 @@ Once a `ContactNetwork` is initialized, we can run a disease simulation. For thi
 
 ```python
 sim = contagion.Contagion(
-  network = network,
-  beta = 0.2,
-  gamma = 0.1,
-  track_symptomatic = True,
-	psi = 0.2)
+    network = network,
+    beta = 0.2,
+    gamma = 0.1,
+    track_symptomatic = True,
+    psi = 0.2)
 sim.plot_simulation(steps = 100)
 ```
 
