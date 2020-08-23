@@ -16,32 +16,23 @@ import seaborn as sns
 
 
 class ContactNetwork():
-	"""
-	A class for creating contact networks.
+	"""A class for creating contact networks.
 	"""
 	def __init__(
 		self,
 		G: nx.Graph,
 		fraction_infected: float = 0,
 		fraction_recovered: float = 0):
-		"""
-		Constructor for the ContactNetwork class.
+		"""Constructor for the ContactNetwork class.
 
-		Parameters:
-			G: a networkx graph
-			fraction_infected: portion of the population infected at
-				initialization
-			fraction_recovered: portion of the population recovered at
-				initialization
-		Initializes:
-			A: adjacency matrix for the graph G
-			n: number of individuals in population
-			fraction_infected: as above, portion of the population infected at
-				initialization. If fraction_infected == 0, one node is infected
-				at initialization.
-			Su: vector of susceptible nodes
-			In: vector of infected nodes
-			Re: vector of recovered nodes
+		Parameters
+		----------
+		G : `nx.Graph`
+			a networkx graph
+		fraction_infected : `float`
+			portion of the population infected at initialization
+		fraction_recovered : `float`
+			portion of the population recovered at initialization
 		"""
 		self.A = nx.adjacency_matrix(G).todense()
 		self.n = len(self.A)
@@ -65,9 +56,17 @@ class ContactNetwork():
 		self.Su, self.In, self.Re = self.init_Su_In_Re()
 
 	def init_Su_In_Re(self):
-		"""
-		Initializes susceptible, infected, and recovered vectors, ensuring
+		"""Initializes susceptible, infected, and recovered vectors, ensuring
 		there is no overlap/redundancy among them.
+
+		Returns
+    	-------
+		susceptible : `numpy.ndarray`
+			array describing whether nodes are susceptible
+		infected : `numpy.ndarray`
+			array describing whether nodes are infected
+		recovered : `numpy.ndarray`
+			array describing whether nodes are recovered
 		"""
 		infected_recovered = np.zeros(self.n)
 		infected_recovered[:round(self.fraction_infected*self.n)] = 1
@@ -100,24 +99,33 @@ class Contagion():
 		implement_testing: bool = False,
 		testing_type: str = "random",
 		test_rate: float = 0.):
-		"""
-		Constructor for the Contagion class.
+		"""Constructor for the Contagion class.
 
-		Parameters:
-			network: a specified contact network
-			contagion_type: either "sir" or "sis"
-			beta: infection rate for susceptible nodes
-			gamma: recovery rate for an infected node
-			save_history: describes whether to save susceptible, infected,
-				and recovered histories for each time step
-			track_symptomatic: describes whether to simulate the emergence
-				of symptoms for modeling testing
-			psi: the rate at which infected nodes become symptomatic
-			implement_testing: describes whether to simulate testing of the
-				symptomatic population
-			testing_type: describes what testing strategy to use.
-			test_rate: portion(s) of nodes from population to test randomly.
-				Can be float or tuple.
+		Parameters
+	    ----------
+		network : `ContactNetwork`
+			a specified contact network
+		contagion_type : `str`
+			either "sir" or "sis"
+		beta : `float`
+			infection rate for susceptible nodes
+		gamma : `float`
+			recovery rate for an infected node
+		save_history : `bool`
+			describes whether to save susceptible, infected, and recovered
+			histories for each time step
+		track_symptomatic : `bool`
+			describes whether to simulate the emergence of symptoms for modeling
+			testing
+		psi : `float`
+			the rate at which infected nodes become symptomatic
+		implement_testing : `bool`
+			describes whether to simulate testing of the symptomatic population
+		testing_type : `str`
+			describes what testing strategy to use.
+		test_rate : `float`
+			portion(s) of nodes from population to test randomly. Can be float
+			or tuple.
 		"""
 		self.network = network
 		self.save_history = save_history
@@ -167,9 +175,8 @@ class Contagion():
 			self.init_histories()
 
 	def init_histories(self):
-		"""
-		Initializes history tracking for susceptible, infected, recovered, and
-		(if paramaterized) symptomatic and tested nodes.
+		"""Initializes history tracking for susceptible, infected, recovered,
+		and (if paramaterized) symptomatic and tested nodes.
 		"""
 		self.Su_hist = [np.sum(self.network.Su)]
 		self.In_hist = [np.sum(self.network.In)]
@@ -184,8 +191,12 @@ class Contagion():
 		return None
 
 	def get_new_transmissions(self) -> np.ndarray:
-		"""
-		Calculates new infections in a time period.
+		"""Calculates new infections in a time period.
+
+		Returns
+    	-------
+		new_transmissions : `np.ndarray`
+			an array describing if nodes are new transmissions
 		"""
 		# calculate neighbors of infected nodes
 		new_transmissions = np.multiply(
@@ -204,8 +215,12 @@ class Contagion():
 		return new_transmissions
 
 	def get_new_recoveries(self) -> np.ndarray:
-		"""
-		Calculates new recoveries in a time period.
+		"""Calculates new recoveries in a time period.
+
+		Returns
+    	-------
+		new_recoveries : `np.ndarray`
+			an array describing if nodes are new recoveries
 		"""
 		# random recovery opportunities
 		random_arr = np.random.rand(self.network.n, 1)
@@ -216,8 +231,12 @@ class Contagion():
 		return new_recoveries
 
 	def get_new_symptomatic(self) -> np.ndarray:
-		"""
-		Calculates new symptomatic infected nodes.
+		"""Calculates new symptomatic infected nodes.
+
+		Returns
+    	-------
+		new_symptomatic : `np.ndarray`
+			an array describing if nodes are newly-symptomatic nodes
 		"""
 		asymptomatic_infected = self.network.In - self.network.Sy
 		random_arr = np.random.rand(self.network.n, 1)
@@ -227,13 +246,17 @@ class Contagion():
 		return new_symptomatic
 
 	def _get_new_tested_random(self):
-		"""
-		Helper function for get_new_tested(). Supports random testing step.
+		"""Helper function for get_new_tested(). Supports random testing step.
 
-		Returns:
-			new_tested: np.ndarray of nodes with newly-administered tests
-		Raises:
-			NotImplementedError for unrecognized test rate
+		Returns
+    	-------
+		new_tested : `np.ndarray`
+			array of nodes with newly-administered tests
+
+		Raises
+		------
+		NotImplementedError
+			Raised if test rate is not recognized.
 		"""
 		if type(self.test_rate) is float:
 			# if only one test rate is passed, interpret it as a naive
@@ -266,14 +289,18 @@ class Contagion():
 		return new_tested
 
 	def _get_new_tested_contact(self):
-		"""
-		Helper function for get_new_tested(). Supports contact tracing testing
+		"""Helper function for get_new_tested(). Supports contact tracing testing
 		step.
 
-		Returns:
-			new_tested: np.ndarray of nodes with newly-administered tests
-		Raises:
-			NotImplementedError for unrecognized test rate
+		Returns
+    	-------
+		new_tested : `np.ndarray`
+			array of nodes with newly-administered tests
+
+		Raises
+		------
+		NotImplementedError
+			Raised if test rate is not recognized.
 		"""
 		if np.sum(self.network.NewPositiveTests) == 0 or \
 			len(self.contact_queue) == 0:
@@ -298,15 +325,23 @@ class Contagion():
 		return new_tested
 
 	def get_new_tested(self):
-		"""
-		Selects new nodes for testing. Re-testing is permitted. Default testing
-		strategy is uniform random testing, although contact tracing ("contact")
-		is also permitted.
+		"""Selects new nodes for testing.
 
-		Returns:
-			new_tested: np.ndarray of nodes with newly-administered tests
-			new_ever_tested: np.ndarray of nodes with newly-administered tests
-				who have not been tested before
+		Re-testing is permitted. Default testing strategy is uniform random
+		testing, although contact tracing ("contact") is also permitted.
+
+		Returns
+    	-------
+		new_tested : `np.ndarray`
+			array of nodes with newly-administered tests
+		new_ever_tested : `np.ndarray`
+			array of nodes with newly-administered tests who have not been
+			tested before
+
+		Raises
+		------
+		NotImplementedError
+			Raised if test rate is not recognized.
 		"""
 		if self.testing_type == "random":
 			new_tested = self._get_new_tested_random()
@@ -320,16 +355,19 @@ class Contagion():
 		return new_tested, new_ever_tested
 
 	def get_new_testedpositive(self) -> np.ndarray:
-		"""
-		New positive tests are newly-administered tests of infected patients.
+		"""New positive tests are newly-administered tests of infected patients.
+
+		Returns
+    	-------
+		new_testedpositive : `np.ndarray`
+			array describing if nodes are new positive tests
 		"""
 		new_testedpositive = np.where(
 			(self.new_tested == 1.) & (self.network.In == 1.), 1., 0.)
 		return new_testedpositive
 
 	def update_Su(self):
-		"""
-		Updates susceptible record with new transmissions.
+		"""Updates susceptible record with new transmissions.
 		"""
 		self.network.Su -= self.new_transmissions
 		if self.save_history:
@@ -337,8 +375,7 @@ class Contagion():
 		return None
 
 	def update_In(self):
-		"""
-		Updates infected record with new transmissions and new recoveries.
+		"""Updates infected record with new transmissions and new recoveries.
 		"""
 		self.network.In += self.new_transmissions - self.new_recoveries
 		if self.save_history:
@@ -346,8 +383,12 @@ class Contagion():
 		return None
 
 	def update_Re(self):
-		"""
-		Updates recovered record with new recoveries.
+		"""Updates recovered record with new recoveries.
+
+		Raises
+		------
+		ValueError
+			Raised if contagion type is invalid.
 		"""
 		if self.contagion_type == "sir":
 			self.network.Re += self.new_recoveries
@@ -362,8 +403,7 @@ class Contagion():
 		return None
 
 	def update_Sy(self):
-		"""
-		Updates symptomatic record with new symptomatic infected nodes.
+		"""Updates symptomatic record with new symptomatic infected nodes.
 		"""
 		self.network.Sy += self.new_symptomatic - self.new_recoveries
 		if self.save_history:
@@ -385,9 +425,8 @@ class Contagion():
 		return [i for i in range(self.network.n) if contact_arr[i] > 0]
 
 	def simulate_step(self):
-		"""
-		Iterates a single simulation time step, updating susceptible, infected,
-		and recovered records with new transmissions and recoveries.
+		"""Iterates a single simulation time step, updating susceptible,
+		infected, and recovered records with new transmissions and recoveries.
 		"""
 		# update new records
 		self.new_transmissions = self.get_new_transmissions()
@@ -416,12 +455,13 @@ class Contagion():
 		return None
 
 	def plot_simulation(self, steps: int = 100):
-		"""
-		Runs an epidemic simulation and produces a corresponding simulation
+		"""Runs an epidemic simulation and produces a corresponding simulation
 		history figure.
 
-		Parameters:
-			steps: number of simulation steps to run.
+		Parameters
+		----------
+		steps : `int`
+			number of simulation steps to run.
 		"""
 		# turn histories on
 		if not self.save_history:
