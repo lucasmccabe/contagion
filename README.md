@@ -1,4 +1,6 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3993315.svg)](https://doi.org/10.5281/zenodo.3993315)
+[![PyPI version](https://badge.fury.io/py/contagion.svg)](https://badge.fury.io/py/contagion)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
 # contagion
 
@@ -44,11 +46,12 @@ network = contagion.ContactNetwork(G, fraction_infected = 0.01)
 Once a `ContactNetwork` is initialized, we can run a disease simulation. For this example, we'll also differentiate between symptomatic and asymptomatic infections:
 
 ```python
-sim = contagion.Contagion(network = network,
-                          beta = 0.2,
-                          gamma = 0.1,
-                          track_symptomatic = True,
-              						psi = 0.2)
+sim = contagion.Contagion(
+    network = network,
+    beta = 0.2,
+    gamma = 0.1,
+    track_symptomatic = True,
+    psi = 0.2)
 sim.plot_simulation(steps = 100)
 ```
 
