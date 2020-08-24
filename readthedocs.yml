@@ -1,14 +1,10 @@
 --- 
+formats: all
+python: 
+  install: 
+    - 
+      requirements: doc/requirements.txt
+  version: 3.7
+sphinx: 
+  configuration: doc/sphinx/source/conf.py
 version: 2
-build: ~
-image: latest
-
-python: ~
-version: 3.7
-
-install: 
-  - 
-    extra_requirements: 
-      - docs
-    method: pip
-    path: "."
