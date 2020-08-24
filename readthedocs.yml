@@ -3,8 +3,8 @@ formats: all
 python: 
   install: 
     - 
-      requirements: doc/requirements.txt
+      requirements: docs/requirements.txt
   version: 3.7
 sphinx: 
-  configuration: doc/sphinx/source/conf.py
+  configuration: docs/conf.py
 version: 2
