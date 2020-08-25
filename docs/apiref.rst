@@ -1,5 +1,5 @@
 ==========================
-contagion Module Reference
+contagion Reference
 ==========================
 
 Detailed reference coming soon.
@@ -7,17 +7,18 @@ Detailed reference coming soon.
 
 .. currentmodule:: contagion
 
-.. autosummary::
-   :toctree: functions/
+
+Classes
+______________
+.. automodsumm:: contagion
+   :classes-only:
 
 
 ContactNetwork
 ______________
-.. autoclass:: contagion.ContactNetwork
-    :members:
+.. automodsumm:: contagion.ContactNetwork
 
 
 Contagion
 _________
-.. autoclass:: contagion.Contagion
-    :members:
+.. automodsumm:: contagion.Contagion

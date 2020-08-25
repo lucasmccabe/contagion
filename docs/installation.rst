@@ -5,7 +5,7 @@ Installation
 Installing contagion
 --------------------
 
-Install ^^contagion^ with pip_:
+Install contagion with pip_:
 
 ::
 
@@ -15,7 +15,7 @@ Install ^^contagion^ with pip_:
 Upgrading contagion
 --------------------
 
-Upgrade ^^contagion^ with pip_:
+Upgrade contagion with pip_:
 
 ::
 
@@ -27,10 +27,10 @@ Requirements
 
 This project was created with:
 
-- matplotlib_==3.2.1
-- numpy_==1.16.6
-- networkx_==2.4
-- seaborn_==0.8.1
+- matplotlib_
+- numpy_
+- networkx_
+- seaborn_
 
 
 
