@@ -13,7 +13,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../contagion'))
-import contagion
+from contagion import contagion
 
 
 # -- Project information -----------------------------------------------------
