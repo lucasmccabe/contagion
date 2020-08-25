@@ -1,28 +1,29 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3993315.svg)](https://doi.org/10.5281/zenodo.3993315)
 [![PyPI version](https://badge.fury.io/py/contagion.svg)](https://badge.fury.io/py/contagion)
+[![Documentation Status](https://readthedocs.org/projects/contagion/badge/?version=latest)](https://contagion.readthedocs.io/en/latest/?badge=latest)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
 # contagion
 
 > `contagion` is a Python package supporting agent-based disease simulation on networks.
 
+
 ## Table of Contents
 * [Table of Contents](#table-of-contents)
-* [General Info](#general-info)
+* [Documentation](#documentation)
 * [Installation](#installation)
-* [Usage](#usage)
+* [Example Usage](#example-usage)
 * [Citing contagion](#citing-contagion)
 * [Contact](#contact)
 * [Requirements](#requirements)
 * [License](#license)
 
-## General Info
-`contagion` consists of two primary components:
-- `ContactNetwork` builds upon a networkx graph, adding vectors for tracking susceptible, infected, and recovered nodes and providing the ability to initialize with a specified fraction of nodes infected and/or recovered.
-- `Contagion` implements disease simulations on contact networks, providing the ability to retrieve per-step compartmental histories and simulate test procedures (e.g. random testing or contact tracing).
+
+## Documentation
+The official documentation is available on [Read the Docs](https://contagion.readthedocs.io).
 
 ## Installation
-Install `contagion` with [pip](https://pypi.org/project/contagion/):
+We can install `contagion` with [pip](https://pypi.org/project/contagion/):
 
 ```bash
 pip install contagion
@@ -35,7 +36,7 @@ import networkx
 from contagion import contagion
 ```
 
-## Usage
+## Example Usage
 We can initialize a `ContactNetwork` using any `networkx` graph:
 
 ```python
@@ -59,8 +60,11 @@ which produces the following simple compartmental history plot:
 
 ![Sample Simulation Compartmental Histories with Symptomatic Tracking](https://raw.githubusercontent.com/lucasmccabe/contagion/dev/images/Sample%20Simulation%20Compartmental%20Histories%20with%20Symptomatic%20Tracking.png)
 
+
+Additional examples are found [here](https://contagion.readthedocs.io/en/latest/examples.html).
+
 ## Citing contagion
-If you found `contagion` useful in your work, please use the [Zenodo](https://zenodo.org/record/3993315) software citation:
+If you find `contagion` useful in your work, please use the [Zenodo](https://zenodo.org/record/3993315) software citation:
 
 > Lucas McCabe. (2020, August 20). lucasmccabe/contagion: contagion v1.0.0 (Version 1.0.0). Zenodo. http://doi.org/10.5281/zenodo.3993315
 
