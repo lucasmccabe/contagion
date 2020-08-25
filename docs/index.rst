@@ -6,15 +6,33 @@
 Welcome to contagion's documentation!
 =====================================
 
+.. image:: https://readthedocs.org/projects/contagion/badge/?version=latest
+    :target: https://contagion.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
+^^contagion^^ is a Python package supporting agent-based disease simulation on networks.
+
+
+General Info
+============
+
+^^contagion^^ consists of two primary components:
+
+    - ^^ContactNetwork^^ builds upon a networkx_ graph, adding vectors for tracking susceptible, infected, and recovered nodes and providing the ability to initialize with a specified fraction of nodes infected and/or recovered.
+    - ^^Contagion^^ implements disease simulations on contact networks, providing the ability to retrieve per-step compartmental histories and simulate test procedures (e.g. random testing or contact tracing).
+
+
+Table of Contents
+=================
+
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 3
+
+   installation
+   examples
+   apiref
+   cite
 
 
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. _networkx: https://github.com/networkx/networkx
