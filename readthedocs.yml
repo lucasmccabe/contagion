@@ -1,11 +1,10 @@
 --- 
-build: ~
-image: latest
-install: 
-  - 
-    extra_requirements: 
-      - docs
-    method: pip
-    path: "."
-python: ~
-version: 3.7
+formats: all
+python: 
+  install: 
+    - 
+      requirements: docs/requirements.txt
+  version: 3.7
+sphinx: 
+  configuration: docs/conf.py
+version: 2
