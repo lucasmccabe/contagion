@@ -1,17 +1,19 @@
-==========
-Reference
-==========
-
-Detailed reference coming soon.
-
+==================================
+Reference for the contagion module
+==================================
 
 
 .. currentmodule:: contagion
 
 .. autosummary:: contagion
 
-.. autoclass:: contagion.Contagion
-    :members:
 
-.. autoclass:: contagion.ContactNetwork
-    :members:
+
+Table of Contents
+-----------------
+
+.. toctree::
+   :maxdepth: 3
+
+   apiref_ContactNetwork
+   apiref_Contagion
