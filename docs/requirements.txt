@@ -3,3 +3,4 @@ matplotlib==3.2.1
 networkx==2.4
 seaborn==0.8.1
 sphinx_automodapi==0.12
+numpydoc==0.7.0
