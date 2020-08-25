@@ -35,8 +35,11 @@ master_doc = 'index'
 #autodoc_mock_imports = ['contagion']
 extensions = [
     'sphinx_automodapi.automodapi',
-    'numpydoc']
-numpydoc_show_class_members = False
+    'numpydoc',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary']
+#numpydoc_show_class_members = False
+autosummary_generate = True
 
 #.. automodapi:: mypackage.mymodule
 

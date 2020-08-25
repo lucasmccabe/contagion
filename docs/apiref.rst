@@ -6,5 +6,6 @@ Detailed reference coming soon.
 
 
 
-.. automodsumm:: contagion.contagion
-   :classes-only:
+.. currentmodule:: contagion
+
+.. autosummary:: contagion
