@@ -12,6 +12,8 @@ Documentation for contagion
 
 contagion is a Python package supporting agent-based disease simulation on networks.
 
+The code can be found on GitHub_.
+
 
 
 General Info
@@ -38,6 +40,7 @@ Table of Contents
 
 
 
+.. _GitHub: https://github.com/lucasmccabe/contagion
 .. _networkx: https://github.com/networkx/networkx
 .. _ContactNetwork: https://contagion.readthedocs.io/en/latest/apiref_ContactNetwork.html
 .. _Contagion: https://contagion.readthedocs.io/en/latest/apiref_Contagion.html#the-contagion-class

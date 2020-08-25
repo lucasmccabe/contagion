@@ -1,11 +1,7 @@
-=============
-Example Usage
-=============
+===============================================================
+Differentiating between symptomatic and asymptomatic infections
+===============================================================
 
-
-
-Example 2: Differentiating between symptomatic and asymptomatic infections
-__________________________________________________________________________
 
 
 .. code-block:: python

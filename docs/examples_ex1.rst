@@ -1,11 +1,7 @@
-=============
-Example Usage
-=============
+==================
+A basic simulation
+==================
 
-
-
-Example 1: A basic simulation
-_____________________________
 
 
 .. code-block:: python
