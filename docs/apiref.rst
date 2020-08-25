@@ -5,14 +5,6 @@ contagion Reference
 Detailed reference coming soon.
 
 
-.. currentmodule:: contagion
-
-
-Classes
-______________
-.. automodsumm:: contagion
-   :classes-only:
-
 
 ContactNetwork
 ______________
