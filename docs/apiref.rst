@@ -6,5 +6,5 @@ Detailed reference coming soon.
 
 
 
-.. automodsumm:: contagion
+.. automodsumm:: contagion.contagion
    :classes-only:
