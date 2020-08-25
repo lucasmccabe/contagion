@@ -1,6 +1,6 @@
-==========================
-contagion Reference
-==========================
+==========
+Reference
+==========
 
 Detailed reference coming soon.
 
