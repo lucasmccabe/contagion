@@ -2,24 +2,28 @@
 Installation
 ============
 
+
+
 Installing contagion
 --------------------
 
-Install contagion with pip_:
+We can install contagion with pip_:
 
 ::
 
     pip install contagion
 
 
+
 Upgrading contagion
 --------------------
 
-Upgrade contagion with pip_:
+We can upgrade contagion with pip_:
 
 ::
 
     pip install contagion --upgrade
+
 
 
 Requirements

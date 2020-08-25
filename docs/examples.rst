@@ -1,8 +1,19 @@
-============
-Examples
-============
+=============
+Example Usage
+=============
 
-Examples
---------
 
-Examples coming soon.
+Examples are illustrative and non-comprehensive. If there is a particular use case you would like demonstrated, please contact_ me.
+
+
+Contents
+-----------------
+
+.. toctree::
+   :maxdepth: 3
+
+   examples_ex1
+   examples_ex2
+
+
+.. _contact: https://github.com/lucasmccabe/contagion#contact
