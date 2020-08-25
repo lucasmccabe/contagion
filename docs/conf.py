@@ -24,6 +24,7 @@ author = 'Lucas McCabe'
 # The full version, including alpha/beta/rc tags
 release = '1.0.1'
 
+master_doc = 'index'
 
 # -- General configuration ---------------------------------------------------
 
