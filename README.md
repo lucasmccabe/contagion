@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3993315.svg)](https://doi.org/10.5281/zenodo.3993315)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3993314.svg)](https://doi.org/10.5281/zenodo.3993314)
 [![PyPI version](https://badge.fury.io/py/contagion.svg)](https://badge.fury.io/py/contagion)
 [![Documentation Status](https://readthedocs.org/projects/contagion/badge/?version=latest)](https://contagion.readthedocs.io/en/latest/?badge=latest)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
@@ -64,9 +64,7 @@ which produces the following simple compartmental history plot:
 Additional examples are found [here](https://contagion.readthedocs.io/en/latest/examples.html).
 
 ## Citing contagion
-If you find `contagion` useful in your work, please use the [Zenodo](https://zenodo.org/record/3993315) software citation:
-
-> Lucas McCabe. (2020, August 20). lucasmccabe/contagion: contagion v1.0.0 (Version 1.0.0). Zenodo. http://doi.org/10.5281/zenodo.3993315
+If you find `contagion` useful in your work, please use the [Zenodo](https://zenodo.org/record/3993314) software citation.
 
 ## Contact
 - Lucas McCabe ([lucas.mccabe@jhu.edu](mailto:lucas.mccabe@jhu.edu))
