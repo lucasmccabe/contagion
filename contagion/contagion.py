@@ -17,6 +17,15 @@ import seaborn as sns
 
 class ContactNetwork():
     """A class for creating contact networks.
+
+    Parameters
+    ----------
+    G : `nx.Graph`
+        a networkx graph
+    fraction_infected : `float`
+        portion of the population infected at initialization
+    fraction_recovered : `float`
+        portion of the population recovered at initialization
     """
     def __init__(
             self,
@@ -90,6 +99,33 @@ class ContactNetwork():
 class Contagion():
     """
     A class for running epidemiological simulations on a contact network.
+
+    Parameters
+    ----------
+    network : `ContactNetwork`
+        a specified contact network
+    contagion_type : `str`
+        either "sir" or "sis"
+    beta : `float`
+        infection rate for susceptible nodes
+    gamma : `float`
+        recovery rate for an infected node
+    save_history : `bool`
+        describes whether to save susceptible, infected, and recovered
+        histories for each time step
+    track_symptomatic : `bool`
+        describes whether to simulate the emergence of symptoms for
+        modeling testing
+    psi : `float`
+        the rate at which infected nodes become symptomatic
+    implement_testing : `bool`
+        describes whether to simulate testing of the symptomatic
+        population
+    testing_type : `str`
+        describes what testing strategy to use.
+    test_rate : `float`
+        portion(s) of nodes from population to test randomly. Can be
+        float or tuple.
     """
     def __init__(
             self,
