@@ -21,11 +21,13 @@ class ContactNetwork():
     Parameters
     ----------
     G : `nx.Graph`
-        a networkx graph
+        A networkx graph.
     fraction_infected : `float`
-        portion of the population infected at initialization
+        The portion of the population infected at initialization.
+        Default is 0.
     fraction_recovered : `float`
-        portion of the population recovered at initialization
+        The portion of the population recovered at initialization.
+        Default is 0.
     """
     def __init__(
             self,
@@ -103,29 +105,39 @@ class Contagion():
     Parameters
     ----------
     network : `ContactNetwork`
-        a specified contact network
+        A specified contact network.
     contagion_type : `str`
-        either "sir" or "sis"
+        Type of contagion to simulate.
+        Can be either "sir" or "sis"
+        Default is "sir"
     beta : `float`
-        infection rate for susceptible nodes
+        Infection rate for susceptible nodes.
+        Default is 1.
     gamma : `float`
-        recovery rate for an infected node
+        Recovery rate for an infected node.
+        Default is 1.
     save_history : `bool`
-        describes whether to save susceptible, infected, and recovered
-        histories for each time step
+        Describes whether to save susceptible, infected, and recovered
+        histories for each time step.
+        Default is True.
     track_symptomatic : `bool`
-        describes whether to simulate the emergence of symptoms for
-        modeling testing
+        Describes whether to simulate the emergence of symptoms for
+        modeling testing.
+        Default is False.
     psi : `float`
         the rate at which infected nodes become symptomatic
+        Default is 1.
     implement_testing : `bool`
         describes whether to simulate testing of the symptomatic
         population
+        Default is False.
     testing_type : `str`
-        describes what testing strategy to use.
+        Describes what testing strategy to use.
+        Default is "random".
     test_rate : `float`
-        portion(s) of nodes from population to test randomly. Can be
+        Portion(s) of nodes from population to test randomly. Can be
         float or tuple.
+        Default is 0.
     """
     def __init__(
             self,
