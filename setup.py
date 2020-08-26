@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="contagion",
-    version="1.0.1",
+    version="1.1.1",
     author="Lucas McCabe",
     author_email="lucashmccabe@gmail.com",
     description="agent-based disease simulation on networks",
