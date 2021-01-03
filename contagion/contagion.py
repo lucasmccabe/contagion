@@ -1,83 +1,90 @@
 #!/usr/bin/env python
 
 """
-contagion.py: Consists of a two classes for implementing a contagion model on a
-contact network.
+contagion.py
 """
 
 __author__ = "Lucas McCabe"
-__status__ = "Development"
+__version__ = "JOSS"
 
 import numpy as np
 import networkx as nx
 import random
+from typing import List
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import collections
+import math
+import scipy.special as scsp
+from scipy.optimize import minimize
+from numpy.linalg import matrix_power
+import copy
 
 class ContactNetwork():
-    """A class for creating contact networks.
-
-    Parameters
-    ----------
-    G : `nx.Graph`
-        A networkx graph.
-    fraction_infected : `float`
-        The portion of the population infected at initialization.
-        Default is 0.
-    fraction_recovered : `float`
-        The portion of the population recovered at initialization.
-        Default is 0.
+    """For creating contact networks fron NetworkX graphs.
     """
     def __init__(
             self,
             G: nx.Graph,
             fraction_infected: float = 0,
             fraction_recovered: float = 0):
-        """Constructor for the ContactNetwork class.
+        """
+        Constructor for the ContactNetwork class. Initializes a contact
+        network with compartmental arrays.
 
         Parameters
         ----------
         G : `nx.Graph`
-            a networkx graph
+            a NetworkX graph
         fraction_infected : `float`
             portion of the population infected at initialization
+            If not provided or provided with value 0, one node is selected
+            to be infected.
         fraction_recovered : `float`
             portion of the population recovered at initialization
+
+        Returns
+        -------
+        None
         """
         self.A = nx.adjacency_matrix(G).todense()
         self.n = len(self.A)
         self.G = G
-
+        self.Mo = None
+        self.mo_thresh = None
+        self.im_type = None
+        self.efficacy = 1.
         if fraction_infected + fraction_recovered > 1.:
-            raise ValueError('Fraction infected/recovered must be at most 1.')
-
+            raise ValueError('The size of the combined infected and recovered populations cannot be larger than the size of the graph.')
         if fraction_infected == 0.:
             self.fraction_infected = 1./self.n
         elif 0. < fraction_infected <= 1.:
             self.fraction_infected = fraction_infected
         else:
             raise ValueError('Fraction infected must be between 0 and 1.')
-
         if 0. <= fraction_recovered <= 1.:
             self.fraction_recovered = fraction_recovered
         else:
             raise ValueError('Fraction recovered must be between 0 and 1.')
-
-        self.Su, self.In, self.Re = self.init_Su_In_Re()
+        self.init_Su_In_Re()
+        return None
 
     def init_Su_In_Re(self):
-        """Initializes susceptible, infected, and recovered vectors, ensuring
+        """Initializes susceptible, infected, and recovered arrays, ensuring
         there is no overlap/redundancy among them.
 
-        Returns
-        -------
+        Initializes
+        -----------
         susceptible : `numpy.ndarray`
             array describing whether nodes are susceptible
         infected : `numpy.ndarray`
             array describing whether nodes are infected
         recovered : `numpy.ndarray`
             array describing whether nodes are recovered
+
+        Returns
+        -------
+        None
         """
         infected_recovered = np.zeros(self.n)
         infected_recovered[:round(self.fraction_infected*self.n)] = 1
@@ -95,54 +102,128 @@ class ContactNetwork():
             [1. if i == 2 else 0.
                 for i in infected_recovered]).reshape(self.n, 1)
         susceptible = np.ones(self.n).reshape(self.n, 1) - infected - recovered
-        return susceptible, infected, recovered
+        self.Su, self.In, self.Re = susceptible, infected, recovered
+        self.og_Su, self.og_In, self.og_Re = copy.deepcopy(susceptible), copy.deepcopy(infected), copy.deepcopy(recovered)
+        return None
+
+    def reset_Su_In_Re(self):
+        """Resets susceptible, infected, and recovered arrays to their original
+        initializations.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
+        """
+        self.Su, self.In, self.Re = \
+            copy.deepcopy(self.og_Su), \
+            copy.deepcopy(self.og_In), \
+            copy.deepcopy(self.og_Re)
+        return None
+
+    def generate_random_walk(self, walk_length: int = 1):
+        """Generates an unbiased random walk of a specified length along the
+        nodes/edges of the contact network. Elements of the walk are node
+        indices.
+
+        Parameters
+        ----------
+        walk_length : `int`
+            number of nodes to include in the random walk
+
+        Returns
+        -------
+        walk : `List`
+            the node indices for the walk
+        """
+        walk = [random.choice([g for g in self.G])]
+        while len(walk) < walk_length:
+            walk.append(
+                random.choice(
+                    [n for n in self.G[walk[-1]]]))
+        return walk
+
+    def generate_random_walk_degree_sequence(self, walk_length: int = 1):
+        """Generates an unbiased random walk of a specified length along the
+        nodes/edges of the contact network and returns the degree of each node
+        encountered during the walk.
+
+        Parameters
+        ----------
+        walk_length : `int`
+            number of nodes to include in the random walk
+
+        Returns
+        -------
+        degrees : `List`
+            the degree of each element of a random walk
+        """
+        walk = self.generate_random_walk(walk_length = walk_length)
+        degrees = [len(self.G[i]) for i in walk]
+        return degrees
+
+    def immunize_network(
+            self,
+            Im,
+            im_type = "vaccinate",
+            efficacy = 1.,
+            mo_thresh = 1):
+        """Immunizes a network according to a provided Immunization array. The
+        immunization array may be generated independently, or using the methods
+        in the Immunization class. Immunization is either "vaccinate"
+        (implemented by placing individuals in the Recovered compartment) or
+        "monitor" (which tracks specified nodes, stopping a contagion simulation
+        when mo_thresh monitored nodes have been ever infected).
+
+        Parameters
+        ----------
+        Im : `numpy.ndarray`
+            a (self.n, 1) array with 1 at indices to be immunized and 0 elsewhere
+        im_type : `str`
+
+        efficacy : `float`
+
+        mo_thresh : `int`
+
+
+        Raises
+        ------
+        ValueError: when immunization array is the wrong dimensions
+        ValueError: when invalid immunization type is provided.
+
+        Returns
+        -------
+        None
+        """
+        if Im.shape == (self.n, 1):
+            if im_type == "vaccinate":
+                if efficacy == 1.:
+                    self.Re += Im
+                elif 0 < efficacy < 1:
+                    self.Im = Im
+                    self.efficacy = efficacy
+                else:
+                    raise ValueError("Invalid immunity type.")
+            elif im_type == "monitor" and mo_thresh > 0:
+                self.Mo = Im
+                self.mo_thresh = mo_thresh
+            else:
+                raise ValueError("Invalid immunization type.")
+            self.im_type = im_type
+        else:
+            raise ValueError("Incorrect dimensions for immunization array.")
+        return None
 
 
 class Contagion():
-    """
-    A class for running epidemiological simulations on a contact network.
-
-    Parameters
-    ----------
-    network : `ContactNetwork`
-        A specified contact network.
-    contagion_type : `str`
-        Type of contagion to simulate.
-        Can be either "sir" or "sis"
-        Default is "sir"
-    beta : `float`
-        Infection rate for susceptible nodes.
-        Default is 1.
-    gamma : `float`
-        Recovery rate for an infected node.
-        Default is 1.
-    save_history : `bool`
-        Describes whether to save susceptible, infected, and recovered
-        histories for each time step.
-        Default is True.
-    track_symptomatic : `bool`
-        Describes whether to simulate the emergence of symptoms for
-        modeling testing.
-        Default is False.
-    psi : `float`
-        the rate at which infected nodes become symptomatic
-        Default is 1.
-    implement_testing : `bool`
-        describes whether to simulate testing of the symptomatic
-        population
-        Default is False.
-    testing_type : `str`
-        Describes what testing strategy to use.
-        Default is "random".
-    test_rate : `float`
-        Portion(s) of nodes from population to test randomly. Can be
-        float or tuple.
-        Default is 0.
+    """For running epidemiological simulations on contact networks.
     """
     def __init__(
             self,
             network: ContactNetwork,
-            contagion_type: str = "sir",
             beta: float = 1.,
             gamma: float = 1.,
             save_history: bool = True,
@@ -150,15 +231,14 @@ class Contagion():
             psi: float = 1.,
             implement_testing: bool = False,
             testing_type: str = "random",
-            test_rate: float = 0.):
+            test_rate: float = 0.,
+            contagion_type: str = "sir"):
         """Constructor for the Contagion class.
 
         Parameters
         ----------
         network : `ContactNetwork`
             a specified contact network
-        contagion_type : `str`
-            either "sir" or "sis"
         beta : `float`
             infection rate for susceptible nodes
         gamma : `float`
@@ -179,29 +259,32 @@ class Contagion():
         test_rate : `float`
             portion(s) of nodes from population to test randomly. Can be
             float or tuple.
+        contagion_type : `str`
+            area for future development. currently must be "sir"
+
+        Returns
+        -------
+        None
         """
         self.network = network
         self.save_history = save_history
         self.track_symptomatic = track_symptomatic
         self.implement_testing = implement_testing
         self.test_rate = test_rate
-        if contagion_type.lower() not in ["sir", "sis"]:
+        if contagion_type.lower() not in ["sir"]:
             raise ValueError("Invalid contagion type provided.")
         else:
             self.contagion_type = contagion_type.lower()
-
         if 0. <= gamma <= 1.:
             # recovery rate for an infected node
             self.gamma = gamma
         else:
             raise ValueError('Gamma must be between 0 and 1.')
-
         if 0. <= beta <= 1.:
             # infection rate for susceptible nodes
             self.beta = beta
         else:
             raise ValueError('Beta must be between 0 and 1.')
-
         if 0. <= psi <= 1.:
             # the rate at which infected nodes become symptomatic
             self.psi = psi
@@ -227,9 +310,22 @@ class Contagion():
         if save_history:
             self.init_histories()
 
+        if self.network.im_type == "vaccinate" and 0 < self.network.efficacy < 1:
+            self.Im_this_step = self.get_Im_random_filter()
+            self.network.Re += self.Im_this_step
+        return None
+
     def init_histories(self):
         """Initializes history tracking for susceptible, infected, recovered,
         and (if paramaterized) symptomatic and tested nodes.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
         """
         self.Su_hist = [np.sum(self.network.Su)]
         self.In_hist = [np.sum(self.network.In)]
@@ -244,8 +340,27 @@ class Contagion():
                 np.sum(self.network.NewPositiveTests)]
         return None
 
-    def get_new_transmissions(self) -> np.ndarray:
+    def get_Im_random_filter(self):
+        """
+        """
+        if self.network.im_type == "vaccinate" and 0 < self.network.efficacy < 1:
+            random_arr = np.random.rand(self.network.n, 1)
+            Im_random_filter = np.multiply(self.network.Im, random_arr)
+            Im_random_filter = np.where(
+                (0 < Im_random_filter)
+                & (Im_random_filter <= self.network.efficacy),
+                1.,
+                0.)
+            return Im_random_filter
+        else:
+            raise ValueError("Immunization much be vaccination with partial efficacy.")
+
+    def get_new_transmissions(self):
         """Calculates new infections in a time period.
+
+        Parameters
+        ----------
+        None
 
         Returns
         -------
@@ -268,8 +383,12 @@ class Contagion():
             & (self.network.Re == 0.), 1., 0.)
         return new_transmissions
 
-    def get_new_recoveries(self) -> np.ndarray:
+    def get_new_recoveries(self):
         """Calculates new recoveries in a time period.
+
+        Parameters
+        ----------
+        None
 
         Returns
         -------
@@ -284,8 +403,12 @@ class Contagion():
             (0 < new_recoveries) & (new_recoveries <= self.gamma), 1., 0.)
         return new_recoveries
 
-    def get_new_symptomatic(self) -> np.ndarray:
+    def get_new_symptomatic(self):
         """Calculates new symptomatic infected nodes.
+
+        Parameters
+        ----------
+        None
 
         Returns
         -------
@@ -301,6 +424,10 @@ class Contagion():
 
     def _get_new_tested_random(self):
         """Helper function for get_new_tested(). Supports random testing step.
+
+        Parameters
+        ----------
+        None
 
         Returns
         -------
@@ -346,6 +473,10 @@ class Contagion():
         """Helper function for get_new_tested(). Supports contact tracing testing
         step.
 
+        Parameters
+        ----------
+        None
+
         Returns
         -------
         new_tested : `np.ndarray`
@@ -379,10 +510,13 @@ class Contagion():
         return new_tested
 
     def get_new_tested(self):
-        """Selects new nodes for testing.
+        """Selects new nodes for testing. Re-testing is permitted. Default
+        testing strategy is uniform random testing, although contact tracing
+        ("contact") is also available.
 
-        Re-testing is permitted. Default testing strategy is uniform random
-        testing, although contact tracing ("contact") is also permitted.
+        Parameters
+        ----------
+        None
 
         Returns
         -------
@@ -408,8 +542,12 @@ class Contagion():
             (new_tested == 1.) & (self.network.EverTested == 0.), 1., 0.)
         return new_tested, new_ever_tested
 
-    def get_new_testedpositive(self) -> np.ndarray:
+    def get_new_testedpositive(self):
         """New positive tests are newly-administered tests of infected patients.
+
+        Parameters
+        ----------
+        None
 
         Returns
         -------
@@ -422,6 +560,14 @@ class Contagion():
 
     def update_Su(self):
         """Updates susceptible record with new transmissions.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
         """
         self.network.Su -= self.new_transmissions
         if self.save_history:
@@ -430,6 +576,14 @@ class Contagion():
 
     def update_In(self):
         """Updates infected record with new transmissions and new recoveries.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
         """
         self.network.In += self.new_transmissions - self.new_recoveries
         if self.save_history:
@@ -438,6 +592,14 @@ class Contagion():
 
     def update_Re(self):
         """Updates recovered record with new recoveries.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
 
         Raises
         ------
@@ -448,16 +610,20 @@ class Contagion():
             self.network.Re += self.new_recoveries
             if self.save_history:
                 self.Re_hist.append(np.sum(self.network.Re))
-        elif self.contagion_type == "sis":
-            self.network.Su += self.new_recoveries
-            if self.save_history:
-                self.Su_hist[-1] = np.sum(self.network.Su)
         else:
             raise ValueError("Invalid contagion type.")
         return None
 
     def update_Sy(self):
         """Updates symptomatic record with new symptomatic infected nodes.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
         """
         self.network.Sy += self.new_symptomatic - self.new_recoveries
         if self.save_history:
@@ -465,7 +631,15 @@ class Contagion():
         return None
 
     def update_EverTested(self):
-        """
+        """Updates record of nodes ever tested with recent tests.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
         """
         self.network.EverTested += self.new_ever_tested
         if self.save_history:
@@ -473,7 +647,17 @@ class Contagion():
         return None
 
     def _get_new_contact_queue(self):
-        """
+        """Helper function for self.simulate_step(). Selects new nodes to update
+        the contact queue.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        li : `List`
+            list of new nodes for the contact queue
         """
         contact_arr = np.dot(self.network.A, self.network.NewPositiveTests)
         return [i for i in range(self.network.n) if contact_arr[i] > 0]
@@ -481,7 +665,22 @@ class Contagion():
     def simulate_step(self):
         """Iterates a single simulation time step, updating susceptible,
         infected, and recovered records with new transmissions and recoveries.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
         """
+        if self.network.im_type == "vaccinate" and 0 < self.network.efficacy < 1:
+            self.network.Re -= self.Im_this_step
+            self.network.Re = np.where(self.network.Re >0, 1., 0.)
+            self.Im_this_step = self.get_Im_random_filter()
+            self.network.Re += self.Im_this_step
+            self.network.Re = np.where(self.network.Re >0, 1., 0.)
+
         # update new records
         self.new_transmissions = self.get_new_transmissions()
         self.new_recoveries = self.get_new_recoveries()
@@ -495,7 +694,6 @@ class Contagion():
 
             if self.testing_type == "contact":
                 self.contact_queue += self._get_new_contact_queue()
-
         # update historical records
         self.update_Su()
         self.update_In()
@@ -508,26 +706,118 @@ class Contagion():
                 np.sum(self.network.NewPositiveTests))
         return None
 
-    def plot_simulation(self, steps: int = 100):
-        """Runs an epidemic simulation and produces a corresponding simulation
-        history figure.
+    def run_simulation(self, steps: float = np.inf):
+        """Runs a contagion simulation for the specified number of steps. If
+        step count is not provided, runs until infectivity subsides.
+
+        Paramaters
+        ----------
+        steps : `float`
+            number of simulation steps to run.
+
+        Returns
+        -------
+        None
+        """
+        # turn histories on
+        if not self.save_history:
+            self.init_histories()
+            self.save_history = True
+        # run simulation
+        i = 0
+        while i < steps:
+            if len(self.In_hist) > 5 and \
+                    (self.In_hist[-1] == 0 or self.In_hist[-1] == self.network.n):
+                break
+            self.simulate_step()
+            i += 1
+        return None
+
+    def run_simulation_get_max_infected(self, steps: float = np.inf):
+        """Runs a contagion simulation and returns the maximum number of
+        infected individuals at any step.
 
         Parameters
         ----------
-        steps : `int`
+        steps : `float`
             number of simulation steps to run.
+
+        Returns
+        -------
+        num : `int`
+            maximum number of infected individuals at any simulation step.
+        """
+        self.run_simulation(steps)
+        return np.max(self.In_hist)
+
+    def run_simulation_monitor_notification(self):
+        """Runs an epidemic simulation up to the point that a threshold number
+        of monitored individual are (ever) infected.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        num : `int`
+            time-step when threshold number of monitored individual were (ever)
+            infected
         """
         # turn histories on
         if not self.save_history:
             self.init_histories()
             self.save_history = True
 
+        if self.network.Mo is None or self.network.mo_thresh is None:
+            raise ValueError("Monitoring not initialized.")
+
+        ever_monitored_infected_arr = np.zeros((self.network.n, 1))
         # run simulation
-        for i in range(steps):
+        while np.count_nonzero(
+                ever_monitored_infected_arr) < self.network.mo_thresh:
+            if len(self.In_hist) > 5 and self.In_hist[-1] == 0:
+                break
             self.simulate_step()
+            curr_monitored_infected_arr = self.network.Mo*self.network.In
+            ever_monitored_infected_arr = np.where(
+                (ever_monitored_infected_arr>0) | (curr_monitored_infected_arr>0),
+                1.,
+                0.)
+        return len(self.In_hist)
+
+    def run_simulation_get_max_infected_index(self, steps = np.inf):
+        """
+        Runs an epidemic simulation and returns the step at which the greatest
+        number of infected individuals was reached.
+
+        Parameters
+        ----------
+        steps : `int`
+            number of simulation steps to run.
+
+        Returns
+        -------
+        Historical index of maximum number of infected individuals.
+        """
+        max_infected = self.run_simulation_get_max_infected(steps)
+
+        return self.In_hist.index(max_infected)
+
+    def plot_simulation(self, steps: float = np.inf):
+        """Runs an epidemic simulation and produces a corresponding simulation
+        history figure.
+
+        Parameters
+        ----------
+        steps : `float`
+            number of simulation steps to run.
+        """
+        # run simulation
+        self.run_simulation(steps)
 
         # generate figure
-        sns.set_style("darkgrid")
+        sns.set_style("white")
         plt.plot(self.Su_hist, label="Susceptible")
         plt.plot(self.Re_hist, label="Recovered")
 
@@ -549,5 +839,136 @@ class Contagion():
         plt.ylabel("Count of Nodes")
         plt.ylim(0., self.network.n)
         plt.legend()
+        sns.despine()
         plt.show()
         return None
+
+class Immunization():
+    """Some algorithms for generating immunization arrays."""
+
+    def __init__(self, network):
+        """Constructor for the Immunization class.
+
+        Parameters
+        ----------
+        network : `ContactNetwork`
+            a specified contact network
+
+        Returns
+        -------
+        None
+        """
+        self.network = network
+        return None
+
+    def generate_random_immunization_array(self, Q = 1):
+        """
+        Generates an immunization array with Q nodes randomly immunized.
+
+        Parameters
+        ----------
+        Q : `int`
+            Number of individuals to immunize; default to 1
+
+        Returns
+        -------
+        Im : `numpy.ndarray`
+            an (n, 1) array with 1 at indices to be immunized and 0 elsewhere
+        """
+        Im = np.zeros(self.network.n)
+        Im[:Q] = 1
+        np.random.shuffle(Im)
+        return Im.reshape(self.network.n, 1)
+
+    def generate_highest_degrees_immunization_array(self, Q = 1):
+        """
+        Generates an immunization array with the Q highest-degree nodes
+        immunized.
+
+        Parameters
+        ----------
+        Q : `int`
+            Number of individuals to immunize; default to 1
+
+        Returns
+        -------
+        Im : `numpy.ndarray`
+            an (n, 1) array with 1 at indices to be immunized and 0 elsewhere
+        """
+        Im = np.zeros(self.network.n)
+        for i in [node[0] for node in \
+                sorted(self.network.G.degree, key=lambda x: x[1], reverse=True)][:Q]:
+            Im[i] = 1
+        return Im.reshape(self.network.n, 1)
+
+    def generate_lowest_degrees_immunization_array(self, Q = 1):
+        """
+        Generates an immunization array with the Q lowest-degree nodes
+        immunized.
+
+        Parameters
+        ----------
+        Q : `int`
+            Number of individuals to immunize; default to 1
+
+        Returns
+        -------
+        Im : `numpy.ndarray`
+            an (n, 1) array with 1 at indices to be immunized and 0 elsewhere
+        """
+        Im = np.zeros(self.network.n)
+        for i in [node[0] for node in \
+                sorted(self.network.G.degree, key=lambda x: x[1], reverse=False)][:Q]:
+            Im[i] = 1
+        return Im.reshape(self.network.n, 1)
+
+    def generate_centrality_immunization_array(
+            self,
+            Q = 1,
+            centrality_type = "betweenness",
+            order = "highest"):
+        """
+        Generates an immunization array with the Q lowest betweenness
+        centrality nodes immunized.
+
+        Parameters
+        ----------
+        Q : `int`
+            Number of individuals to immunize; default to 1
+        centrality_type : `str`
+            Flavor of centrality to use. Defaults to betweenness
+        order : `str`
+            Either "highest" or "lowest"
+
+        Returns
+        -------
+        Im : `numpy.ndarray`
+            an (n, 1) array with 1 at indices to be immunized and 0 elsewhere
+
+        Raises
+        ------
+        NotImplementedError : for invalid centrality type or how not in
+            ["highest", "lowest"]
+        """
+        Im = np.zeros(self.network.n)
+
+        if centrality_type == "betweenness":
+            centralities = nx.betweenness_centrality(self.network.G)
+        elif centrality_type == "eigenvector":
+            centralities = nx.eigenvector_centrality(self.network.G)
+        elif centrality_type == "closeness":
+            centralities = nx.closeness_centrality(self.network.G)
+        else:
+            raise NotImplementedError
+
+        if order == "lowest":
+            for i in sorted(
+                    centralities, key=lambda x: centralities[x], reverse=False)[:Q]:
+                Im[i] = 1
+        elif order == "highest":
+            for i in sorted(
+                    centralities, key=lambda x: centralities[x], reverse=True)[:Q]:
+                Im[i] = 1
+        else:
+            raise NotImplementedError
+        return Im.reshape(self.network.n, 1)

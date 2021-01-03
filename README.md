@@ -5,7 +5,7 @@
 
 # contagion
 
-> `contagion` is a Python package supporting agent-based disease simulation on networks.
+> `contagion` is a Python package supporting contagion process simulation on networks.
 
 
 ## Table of Contents
