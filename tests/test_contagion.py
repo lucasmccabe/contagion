@@ -81,19 +81,7 @@ class TestContagion(unittest.TestCase):
 
     def test_immunize_network_vaccinate(self):
         """
-        """
-        G = nx.barabasi_albert_graph(100, 5)
-        network = contagion.ContactNetwork(
-            G,
-            fraction_infected = 0.5,
-            fraction_recovered = 0.35)
-        Im = copy.deepcopy(network.In)
-        np.random.shuffle(Im)
-        network.immunize_network(Im, efficacy = 0.7)
-        self.assertEqual(np.sum(network.Im), np.sum(Im))
-
-    def test_immunize_network_vaccinate(self):
-        """
+        Tests that network immunization is working correctly.
         """
         G = nx.barabasi_albert_graph(100, 5)
         network = contagion.ContactNetwork(
@@ -107,6 +95,7 @@ class TestContagion(unittest.TestCase):
 
     def test_init_histories(self):
         """
+        Tests initiation of simulation history.
         """
         G = nx.barabasi_albert_graph(100, 5)
         network = contagion.ContactNetwork(
@@ -117,6 +106,7 @@ class TestContagion(unittest.TestCase):
 
     def test_run_simulation(self):
         """
+        Tests that the simulation runs for an appropriate number of steps.
         """
         G = nx.barabasi_albert_graph(100, 5)
         network = contagion.ContactNetwork(
@@ -128,6 +118,7 @@ class TestContagion(unittest.TestCase):
 
     def test_max_infected(self):
         """
+        Tests believability of maximum infected during simulation.
         """
         G = nx.barabasi_albert_graph(100, 5)
         network = contagion.ContactNetwork(
@@ -138,6 +129,7 @@ class TestContagion(unittest.TestCase):
 
     def test_max_infected_index(self):
         """
+        Tests index of maximum infected during simulation.
         """
         G = nx.barabasi_albert_graph(100, 5)
         network = contagion.ContactNetwork(
@@ -145,8 +137,6 @@ class TestContagion(unittest.TestCase):
             fraction_infected = 0.25)
         sim = contagion.Contagion(network, save_history = True)
         self.assertGreater(sim.run_simulation_get_max_infected_index(), -1)
-
-
 
 
 if __name__ == '__main__':

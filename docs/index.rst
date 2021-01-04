@@ -10,7 +10,8 @@ Documentation for contagion
     :target: https://contagion.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-contagion is a Python package supporting agent-based disease simulation on networks.
+contagion is a Python package supporting node immunization and network contagion simulation.
+
 
 The code can be found on GitHub_.
 
@@ -19,11 +20,12 @@ The code can be found on GitHub_.
 General Info
 ============
 
-contagion consists of two classes:
+contagion is designed to be easy-to-use and full-featured, supporting computer scientists, public health researchers, network theorists, and more. Here are a few things we love about contagion:
 
-    - ContactNetwork_ builds upon a networkx_ graph, adding vectors for tracking susceptible, infected, and recovered nodes and providing the ability to initialize with a specified fraction of nodes infected and/or recovered.
-
-    - Contagion_ implements disease simulations on contact networks, providing the ability to retrieve per-step compartmental histories and simulate test procedures (e.g. random testing or contact tracing).
+- provides an accessible interface for incorporating node immunization into contagion simulations
+- supports immunization with delayed effect
+- handles partial immunity
+- implements node testing policies (random, contact tracing)
 
 
 
@@ -31,16 +33,14 @@ Table of Contents
 =================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 5
 
    installation
-   examples
+   tutorial
    apiref
+   examples
    cite
 
 
 
 .. _GitHub: https://github.com/lucasmccabe/contagion
-.. _networkx: https://github.com/networkx/networkx
-.. _ContactNetwork: https://contagion.readthedocs.io/en/latest/apiref_ContactNetwork.html
-.. _Contagion: https://contagion.readthedocs.io/en/latest/apiref_Contagion.html#the-contagion-class

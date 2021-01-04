@@ -8,7 +8,7 @@ setup(
     version="1.1.1",
     author="Lucas McCabe",
     author_email="lucashmccabe@gmail.com",
-    description="agent-based disease simulation on networks",
+    description="a Python package for node immunization and network contagion simulation",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/lucasmccabe/contagion",

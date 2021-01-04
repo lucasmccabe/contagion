@@ -51,7 +51,9 @@ class ContactNetwork():
         self.n = len(self.A)
         self.G = G
         self.Mo = None
+        self.Im = None
         self.mo_thresh = None
+        self.im_starts_after = 0
         self.im_type = None
         self.efficacy = 1.
         if fraction_infected + fraction_recovered > 1.:
@@ -169,6 +171,7 @@ class ContactNetwork():
             self,
             Im,
             im_type = "vaccinate",
+            im_starts_after = 0,
             efficacy = 1.,
             mo_thresh = 1):
         """Immunizes a network according to a provided Immunization array. The
@@ -183,11 +186,14 @@ class ContactNetwork():
         Im : `numpy.ndarray`
             a (self.n, 1) array with 1 at indices to be immunized and 0 elsewhere
         im_type : `str`
-
+            immunization type. Can be either "vaccinate" or "monitor"
+        im_starts_after : `int`
+            step index after which the immunization policy should be implemented
         efficacy : `float`
-
+            efficacy of the immunization (as a float in [0, 1.])
+            only operates with im_type == "vacciante".
         mo_thresh : `int`
-
+            monitor threshold.
 
         Raises
         ------
@@ -200,12 +206,11 @@ class ContactNetwork():
         """
         if Im.shape == (self.n, 1):
             if im_type == "vaccinate":
-                if efficacy == 1.:
-                    self.Re += Im
-                elif 0 < efficacy < 1:
-                    self.Im = Im
-                    self.efficacy = efficacy
-                else:
+                self.im_starts_after = im_starts_after
+                self.Im = Im
+                self.efficacy = efficacy
+
+                if efficacy <= 0 or efficacy > 1:
                     raise ValueError("Invalid immunity type.")
             elif im_type == "monitor" and mo_thresh > 0:
                 self.Mo = Im
@@ -608,6 +613,8 @@ class Contagion():
         """
         if self.contagion_type == "sir":
             self.network.Re += self.new_recoveries
+            self.network.Re = np.where(self.network.Re > 0, 1., 0.)
+
             if self.save_history:
                 self.Re_hist.append(np.sum(self.network.Re))
         else:
@@ -665,6 +672,7 @@ class Contagion():
     def simulate_step(self):
         """Iterates a single simulation time step, updating susceptible,
         infected, and recovered records with new transmissions and recoveries.
+        Handles delayed immunization and "switching out" for partial immunity.
 
         Parameters
         ----------
@@ -674,12 +682,20 @@ class Contagion():
         -------
         None
         """
-        if self.network.im_type == "vaccinate" and 0 < self.network.efficacy < 1:
+        if self.network.im_type == "vaccinate" \
+                and self.network.efficacy == 1 \
+                and len(self.In_hist) - 1 == self.network.im_starts_after:
+            self.network.Re += self.network.Im
+            self.network.Re = np.where(self.network.Re > 0, 1., 0.)
+
+        if self.network.im_type == "vaccinate" \
+                and 0 < self.network.efficacy < 1 \
+                and len(self.In_hist) - 1 >= self.network.im_starts_after:
             self.network.Re -= self.Im_this_step
-            self.network.Re = np.where(self.network.Re >0, 1., 0.)
+            self.network.Re = np.where(self.network.Re >  0, 1., 0.)
             self.Im_this_step = self.get_Im_random_filter()
             self.network.Re += self.Im_this_step
-            self.network.Re = np.where(self.network.Re >0, 1., 0.)
+            self.network.Re = np.where(self.network.Re > 0, 1., 0.)
 
         # update new records
         self.new_transmissions = self.get_new_transmissions()
@@ -844,7 +860,7 @@ class Contagion():
         return None
 
 class Immunization():
-    """Some algorithms for generating immunization arrays."""
+    """Some baseline algorithms for generating immunization arrays."""
 
     def __init__(self, network):
         """Constructor for the Immunization class.
@@ -928,8 +944,9 @@ class Immunization():
             centrality_type = "betweenness",
             order = "highest"):
         """
-        Generates an immunization array with the Q lowest betweenness
-        centrality nodes immunized.
+        Generates an immunization array with the Q lowest or highest centrality
+        nodes immunized. Three measures of centrality are implemented:
+        betweenness, eigenvector, and closeness.
 
         Parameters
         ----------

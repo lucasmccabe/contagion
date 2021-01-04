@@ -1,29 +1,36 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3993314.svg)](https://doi.org/10.5281/zenodo.3993314)
 [![PyPI version](https://badge.fury.io/py/contagion.svg)](https://badge.fury.io/py/contagion)
 [![Documentation Status](https://readthedocs.org/projects/contagion/badge/?version=latest)](https://contagion.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.com/lucasmccabe/contagion.svg?branch=master)](https://travis-ci.com/lucasmccabe/contagion)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
 # contagion
 
-> `contagion` is a Python package supporting contagion process simulation on networks.
+> `contagion` is a Python package supporting node immunization and network contagion simulation
+
+`contagion` is designed to be easy-to-use and full-featured, supporting computer scientists, public health researchers, network theorists, and more. Here are a few things we love about `contagion`:
+
+- provides an accessible interface for incorporating node immunization into contagion simulations
+- supports immunization with delayed effect
+- handles partial immunity
+- can track symptom onset
+- implements node testing policies (random, contact tracing)
 
 
 ## Table of Contents
 * [Table of Contents](#table-of-contents)
+* [Getting Started](#getting-started)
 * [Documentation](#documentation)
-* [Installation](#installation)
 * [Example Usage](#example-usage)
 * [Citing contagion](#citing-contagion)
+* [Contributing to contagion](#contributing)
 * [Contact](#contact)
 * [Requirements](#requirements)
 * [License](#license)
 
 
-## Documentation
-The official documentation is available on [Read the Docs](https://contagion.readthedocs.io).
-
-## Installation
-We can install `contagion` with [pip](https://pypi.org/project/contagion/):
+## Getting Started
+Install `contagion` with [pip](https://pypi.org/project/contagion/):
 
 ```bash
 pip install contagion
@@ -36,45 +43,34 @@ import networkx
 from contagion import contagion
 ```
 
-## Example Usage
-We can initialize a `ContactNetwork` using any `networkx` graph:
 
-```python
-G = networkx.barabasi_albert_graph(1000, 25)
-network = contagion.ContactNetwork(G, fraction_infected = 0.01)
-```
+## Documentation
+Official documentation - including a tutorial, detailed API reference, and a few worked examples - is available on [Read the Docs](https://contagion.readthedocs.io).
 
-Once a `ContactNetwork` is initialized, we can run a disease simulation. For this example, we'll also differentiate between symptomatic and asymptomatic infections:
-
-```python
-sim = contagion.Contagion(
-    network = network,
-    beta = 0.2,
-    gamma = 0.1,
-    track_symptomatic = True,
-    psi = 0.2)
-sim.plot_simulation(steps = 100)
-```
-
-which produces the following simple compartmental history plot:
-
-![Sample Simulation Compartmental Histories with Symptomatic Tracking](https://raw.githubusercontent.com/lucasmccabe/contagion/dev/images/Sample%20Simulation%20Compartmental%20Histories%20with%20Symptomatic%20Tracking.png)
-
-
-Additional examples are found [here](https://contagion.readthedocs.io/en/latest/examples.html).
 
 ## Citing contagion
 If you find `contagion` useful in your work, please use the [Zenodo](https://zenodo.org/record/3993314) software citation.
 
-## Contact
-- Lucas McCabe ([lucas.mccabe@jhu.edu](mailto:lucas.mccabe@jhu.edu))
 
 ## Requirements
 This project was created with:
-- `matplotlib==3.2.1`
-- `numpy==1.16.6`
-- `networkx==2.4`
-- `seaborn==0.8.1`
+- `matplotlib==3.3.3`
+- `numpy==1.19.3`
+- `networkx==2.5`
+- `scipy>=1.5.0`
+- `seaborn==0.11.1`
+
+
+## Contributing to contagion
+
+We'd love your help! If you'd like to make an addition or improvement, please submit a [pull request](https://github.com/lucasmccabe/contagion/pulls) consisting of an atomic commit and a brief message describing your contribution. If you find something wrong, please submit a bug report to the [issue tracker](https://github.com/lucasmccabe/contagion/issues). For other questions or comments, feel free to [contact me](#citing-contagion) directly.
+
+Thanks for helping make `contagion` better!
+
+
+## Contact
+- Lucas McCabe ([lucas.mccabe@jhu.edu](mailto:lucas.mccabe@jhu.edu))
+
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
