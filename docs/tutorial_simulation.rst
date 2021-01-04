@@ -1,6 +1,6 @@
-============
+====================
 Tutorial: Simulation
-============
+====================
 
 If you haven't initialized your ContactNetwork, it's best to go back to the ContactNetwork_ section of the tutorial. If you'd like to start by immunizing your network, feel free to go back to the Immunization_ section of the tutorial.
 
@@ -84,7 +84,7 @@ Alternately, a contact tracing approach is available:
 
 This method implements the logic illustrated below:
 
-.. image:: /_static/contagion_test and trace.PNG
+.. image:: /_static/contagion_test_and_trace.PNG
 
 
 .. _ContactNetwork: https://contagion.readthedocs.io/en/latest/tutorial_ContactNetwork.html
