@@ -23,7 +23,7 @@
 * [Documentation](#documentation)
 * [Example Usage](#example-usage)
 * [Citing contagion](#citing-contagion)
-* [Contributing to contagion](#contributing)
+* [Contributing to contagion](#contributing-to-contagion)
 * [Contact](#contact)
 * [Requirements](#requirements)
 * [License](#license)
@@ -45,7 +45,7 @@ from contagion import contagion
 
 
 ## Documentation
-Official documentation - including a tutorial, detailed API reference, and a few worked examples - is available on [Read the Docs](https://contagion.readthedocs.io).
+Official documentation - including a [tutorial](https://contagion.readthedocs.io/en/latest/tutorial.html), [API reference](https://contagion.readthedocs.io/en/latest/apiref.html), and a few worked [examples](https://contagion.readthedocs.io/en/latest/examples.html) - is available on [Read the Docs](https://contagion.readthedocs.io).
 
 
 ## Citing contagion

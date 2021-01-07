@@ -84,7 +84,7 @@ Alternately, a contact tracing approach is available:
 
 This method implements the logic illustrated below:
 
-.. image:: /_static/contagion_test_and_trace.PNG
+.. image:: /_static/contagiontestandtrace.PNG
 
 
 .. _ContactNetwork: https://contagion.readthedocs.io/en/latest/tutorial_ContactNetwork.html

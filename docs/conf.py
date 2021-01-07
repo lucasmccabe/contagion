@@ -23,7 +23,7 @@ copyright = '2020, Lucas McCabe'
 author = 'Lucas McCabe'
 
 # The full version, including alpha/beta/rc tags
-release = '1.1.1'
+release = '1.2.1'
 
 master_doc = 'index'
 

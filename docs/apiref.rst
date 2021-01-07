@@ -5,8 +5,6 @@ API Reference
 
 .. currentmodule:: contagion
 
-.. autosummary:: contagion
-
 
 
 Contents

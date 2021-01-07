@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="contagion",
-    version="1.1.1",
+    version="1.2.1",
     author="Lucas McCabe",
     author_email="lucashmccabe@gmail.com",
     description="a Python package for node immunization and network contagion simulation",

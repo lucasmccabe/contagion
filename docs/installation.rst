@@ -26,15 +26,6 @@ We can upgrade contagion with pip_:
 
 
 
-Requirements
-------------
-
-This project was created with:
-
-- matplotlib_
-- numpy_
-- networkx_
-- seaborn_
 
 
 
