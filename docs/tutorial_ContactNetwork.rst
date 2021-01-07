@@ -24,11 +24,11 @@ To specify a portion of the network to be (randomly) infected and/or recovered a
     fraction_recovered = 0.)
 
 
-To retrieve the ContactNetwork's size (number of nodes), undelying NetworkX graph, or adjacency matrix, use the ``n``, ``G``, or ``A`` attributes, respectively.
+To retrieve the ContactNetwork's size (number of nodes), underlying NetworkX graph, or adjacency matrix, use the ``n``, ``G``, or ``A`` attributes, respectively.
+
 
 
 If you are interested in immunizing your network using a specific policy, proceed to the immunization_ part of the tutorial. Otherwise, proceed to the simulation_ section.
-
 
 
 

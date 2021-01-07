@@ -989,3 +989,189 @@ class Immunization():
         else:
             raise NotImplementedError
         return Im.reshape(self.network.n, 1)
+
+    def generate_largest_cliques_immunization_array(
+            self,
+            Q = 1):
+        """
+        Generates an immunization array consisting of the Q unique individuals
+        in the largest cliques.
+
+        Parameters
+        ----------
+        Q : `int`
+            Number of individuals to immunize; default to 1
+
+        Returns
+        -------
+        Im : `numpy.ndarray`
+            an (n, 1) array with 1 at indices to be immunized and 0 elsewhere
+
+        Raises
+        ------
+        ValueError : if no cliques are found.
+        """
+        Im = np.zeros(self.network.n)
+        cliques = [i for i in nx.enumerate_all_cliques(self.network.G)]
+        if not cliques:
+            raise ValueError("No cliques found.")
+
+        Im_cliques = []
+        while len(set(Im_cliques)) <= Q:
+            Im_cliques += cliques[-1]
+            cliques = cliques[:-1]
+        Im_cliques = list(set(Im_cliques))[:Q]
+
+        for i in Im_cliques:
+            Im[i] = 1
+
+        return Im.reshape(self.network.n, 1)
+
+    def generate_smallest_cliques_immunization_array(
+            self,
+            Q = 1):
+        """
+        Generates an immunization array consisting of the Q unique individuals
+        in the smallest cliques of size greater than 1.
+
+        Parameters
+        ----------
+        Q : `int`
+            Number of individuals to immunize; default to 1
+
+        Returns
+        -------
+        Im : `numpy.ndarray`
+            an (n, 1) array with 1 at indices to be immunized and 0 elsewhere
+
+        Raises
+        ------
+        ValueError : if no cliques are found.
+        """
+        Im = np.zeros(self.network.n)
+        cliques = [i for i in nx.enumerate_all_cliques(self.network.G) if len(i) > 1]
+        if not cliques:
+            raise ValueError("No cliques found.")
+
+        Im_cliques = []
+        while len(set(Im_cliques)) <= Q:
+            Im_cliques += cliques[0]
+            cliques = cliques[1:]
+        Im_cliques = list(set(Im_cliques))[:Q]
+
+        for i in Im_cliques:
+            Im[i] = 1
+
+        return Im.reshape(self.network.n, 1)
+
+    def generate_longest_chains_immunization_array(
+            self,
+            Q = 1):
+        """
+        Generates an immunization array consisting of the Q unique individuals
+        in the longest decomposed chains.
+
+        Parameters
+        ----------
+        Q : `int`
+            Number of individuals to immunize; default to 1
+
+        Returns
+        -------
+        Im : `numpy.ndarray`
+            an (n, 1) array with 1 at indices to be immunized and 0 elsewhere
+
+        Raises
+        ------
+        ValueError : if no cliques are found.
+        """
+        Im = np.zeros(self.network.n)
+        cliques = [i for i in nx.chain_decomposition(self.network.G)]
+        if not cliques:
+            raise ValueError("No chains found.")
+
+        Im_cliques = []
+        while len(set(Im_cliques)) <= Q:
+            Im_cliques += [i for j in cliques[0] for i in j]
+            cliques = cliques[1:]
+        Im_cliques = list(set(Im_cliques))[:Q]
+
+        for i in Im_cliques:
+            Im[i] = 1
+
+        return Im.reshape(self.network.n, 1)
+
+    def generate_bfs_immunization_array(
+            self,
+            Q = 1):
+        """
+        Generates an immunization array consisting of Q first nodes encountered
+        in a breadth-first search.
+
+        Parameters
+        ----------
+        Q : `int`
+            Number of individuals to immunize; default to 1
+
+        Returns
+        -------
+        Im : `numpy.ndarray`
+            an (n, 1) array with 1 at indices to be immunized and 0 elsewhere
+
+        Raises
+        ------
+        ValueError : if BFS fails.
+        """
+        Im = np.zeros(self.network.n)
+        search = nx.algorithms.coloring.strategy_connected_sequential_bfs(
+            self.network.G,
+            1) #note: colors = 1 is ignored in this nx method
+        search = list(set([i for i in search]))
+
+        if not search:
+            raise ValueError("BFS failed.")
+
+        Im_bfs = search[:Q]
+
+        for i in Im_bfs:
+            Im[i] = 1
+
+        return Im.reshape(self.network.n, 1)
+
+
+    def generate_dfs_immunization_array(
+            self,
+            Q = 1):
+        """
+        Generates an immunization array consisting of Q first nodes encountered
+        in a depth-first search.
+
+        Parameters
+        ----------
+        Q : `int`
+            Number of individuals to immunize; default to 1
+
+        Returns
+        -------
+        Im : `numpy.ndarray`
+            an (n, 1) array with 1 at indices to be immunized and 0 elsewhere
+
+        Raises
+        ------
+        ValueError : if DFS fails.
+        """
+        Im = np.zeros(self.network.n)
+        search = nx.algorithms.coloring.strategy_connected_sequential_dfs(
+            self.network.G,
+            1) #note: colors = 1 is ignored in this nx method
+        search = list(set([i for i in search]))
+
+        if not search:
+            raise ValueError("BFS failed.")
+
+        Im_bfs = search[:Q]
+
+        for i in Im_bfs:
+            Im[i] = 1
+
+        return Im.reshape(self.network.n, 1)
