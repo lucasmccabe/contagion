@@ -128,7 +128,7 @@ class TestContagion(unittest.TestCase):
         sim = contagion.Contagion(
             network,
             beta = [1., 0., 0.5, 1., 0., 0.5])
-        self.assertIsInstance(sim.beta, list)
+        self.assertIsInstance(sim.beta_queue, list)
 
     def test_max_infected(self):
         """
