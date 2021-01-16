@@ -57,7 +57,8 @@ class ContactNetwork():
         self.im_type = None
         self.efficacy = 1.
         if fraction_infected + fraction_recovered > 1.:
-            raise ValueError('The size of the combined infected and recovered populations cannot be larger than the size of the graph.')
+            raise ValueError(
+                'The size of the combined infected and recovered populations cannot be larger than the size of the graph.')
         if fraction_infected == 0.:
             self.fraction_infected = 1./self.n
         elif 0. < fraction_infected <= 1.:
@@ -244,8 +245,12 @@ class Contagion():
         ----------
         network : `ContactNetwork`
             a specified contact network
-        beta : `float`
-            infection rate for susceptible nodes
+        beta : `float` or `List`
+            infection rate for susceptible nodes. A list (e.g.
+            [0.1, 0.1, 0.7, 0.7]) may be passed to implement variable
+            transmission rates. If the simulation time is longer than the length
+            of this list, the last rate in the list is maintained for the
+            remainder of the simulation.
         gamma : `float`
             recovery rate for an infected node
         save_history : `bool`
@@ -276,20 +281,29 @@ class Contagion():
         self.track_symptomatic = track_symptomatic
         self.implement_testing = implement_testing
         self.test_rate = test_rate
+
         if contagion_type.lower() not in ["sir"]:
             raise ValueError("Invalid contagion type provided.")
         else:
             self.contagion_type = contagion_type.lower()
+
         if 0. <= gamma <= 1.:
             # recovery rate for an infected node
             self.gamma = gamma
         else:
             raise ValueError('Gamma must be between 0 and 1.')
-        if 0. <= beta <= 1.:
+
+        if isinstance(beta, (float, int)) and 0. <= beta <= 1.:
             # infection rate for susceptible nodes
+            self.beta_queue = []
             self.beta = beta
+        elif isinstance(beta, list) \
+                and [0. <= i <= 1. for i in beta] == [True]*len(beta):
+            self.beta_queue = beta[1:]
+            self.beta = beta[0]
         else:
-            raise ValueError('Beta must be between 0 and 1.')
+            raise ValueError('Transmission rates must be between 0 and 1.')
+
         if 0. <= psi <= 1.:
             # the rate at which infected nodes become symptomatic
             self.psi = psi
@@ -386,6 +400,10 @@ class Contagion():
             (0 < new_transmissions)
             & (new_transmissions <= self.beta)
             & (self.network.Re == 0.), 1., 0.)
+
+        if self.beta_queue:
+            self.beta = self.beta_queue[0]
+            self.beta_queue = self.beta_queue[1:]
         return new_transmissions
 
     def get_new_recoveries(self):

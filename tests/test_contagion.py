@@ -116,6 +116,20 @@ class TestContagion(unittest.TestCase):
         sim.run_simulation()
         self.assertGreater(len(sim.In_hist), 4)
 
+    def test_time_varying_beta(self):
+        """
+        Tests that the simulation correctly initializes time-varying
+        transmission rates as a list.
+        """
+        G = nx.barabasi_albert_graph(100, 5)
+        network = contagion.ContactNetwork(
+            G,
+            fraction_infected = 0.25)
+        sim = contagion.Contagion(
+            network,
+            beta = [1., 0., 0.5, 1., 0., 0.5])
+        self.assertIsInstance(sim.beta, list)
+
     def test_max_infected(self):
         """
         Tests believability of maximum infected during simulation.
