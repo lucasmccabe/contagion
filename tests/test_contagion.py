@@ -130,6 +130,40 @@ class TestContagion(unittest.TestCase):
             beta = [1., 0., 0.5, 1., 0., 0.5])
         self.assertIsInstance(sim.beta_queue, list)
 
+    def test_single_omega(self):
+        """
+        Tests running of a simulation with a Re-to-Su probability.
+        """
+        G = nx.barabasi_albert_graph(100, 5)
+        network = contagion.ContactNetwork(
+            G,
+            fraction_infected = 0.25)
+        sim = contagion.Contagion(
+            network,
+            beta = 0.5,
+            omega = 0.05)
+        sim.run_simulation()
+        self.assertGreater(len(sim.In_hist), 4)
+
+    def test_multiple_omega(self):
+        """
+        Tests running of a simulation with Re-to-Su and Im-to_Su probabilities.
+        """
+        G = nx.barabasi_albert_graph(100, 5)
+        network = contagion.ContactNetwork(
+            G,
+            fraction_infected = 0.25)
+        Im = copy.deepcopy(network.In)
+        np.random.shuffle(Im)
+        network.immunize_network(Im, efficacy = 0.7)
+        sim = contagion.Contagion(
+            network,
+            beta = 0.5,
+            omega = (0.1, 0.05))
+        sim.run_simulation()
+        self.assertGreater(len(sim.In_hist), 4)
+
+
     def test_max_infected(self):
         """
         Tests believability of maximum infected during simulation.
