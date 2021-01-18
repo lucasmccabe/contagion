@@ -4,25 +4,22 @@ Installation
 
 
 
-Installing contagion
---------------------
+Getting Started
+---------------
 
-We can install contagion with pip_:
+We can install ``contagion`` with pip_:
 
 ::
 
     pip install contagion
 
 
+Once ``contagion`` is installed, import ``NetworkX`` and ``contagion``:
 
-Upgrading contagion
---------------------
+.. code-block:: python
 
-We can upgrade contagion with pip_:
-
-::
-
-    pip install contagion --upgrade
+    import networkx
+    from contagion import contagion
 
 
 
@@ -30,7 +27,3 @@ We can upgrade contagion with pip_:
 
 
 .. _pip: https://pypi.org/project/contagion/
-.. _matplotlib: https://pypi.org/project/matplotlib/
-.. _numpy: https://pypi.org/project/numpy/
-.. _networkx: https://pypi.org/project/networkx/
-.. _seaborn: https://pypi.org/project/seaborn/

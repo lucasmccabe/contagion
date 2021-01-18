@@ -5,7 +5,6 @@ contagion.py
 """
 
 __author__ = "Lucas McCabe"
-__version__ = "JOSS"
 
 import numpy as np
 import networkx as nx
@@ -57,7 +56,8 @@ class ContactNetwork():
         self.im_type = None
         self.efficacy = 1.
         if fraction_infected + fraction_recovered > 1.:
-            raise ValueError('The size of the combined infected and recovered populations cannot be larger than the size of the graph.')
+            raise ValueError(
+                'The size of the combined infected and recovered populations cannot be larger than the size of the graph.')
         if fraction_infected == 0.:
             self.fraction_infected = 1./self.n
         elif 0. < fraction_infected <= 1.:
@@ -105,7 +105,10 @@ class ContactNetwork():
                 for i in infected_recovered]).reshape(self.n, 1)
         susceptible = np.ones(self.n).reshape(self.n, 1) - infected - recovered
         self.Su, self.In, self.Re = susceptible, infected, recovered
-        self.og_Su, self.og_In, self.og_Re = copy.deepcopy(susceptible), copy.deepcopy(infected), copy.deepcopy(recovered)
+        (self.og_Su, self.og_In, self.og_Re) = (
+            copy.deepcopy(susceptible),
+            copy.deepcopy(infected),
+            copy.deepcopy(recovered))
         return None
 
     def reset_Su_In_Re(self):
@@ -234,6 +237,7 @@ class Contagion():
             save_history: bool = True,
             track_symptomatic: bool = False,
             psi: float = 1.,
+            omega: float = 0.,
             implement_testing: bool = False,
             testing_type: str = "random",
             test_rate: float = 0.,
@@ -244,8 +248,12 @@ class Contagion():
         ----------
         network : `ContactNetwork`
             a specified contact network
-        beta : `float`
-            infection rate for susceptible nodes
+        beta : `float` or `List`
+            infection rate for susceptible nodes. A list (e.g.
+            [0.1, 0.1, 0.7, 0.7]) may be passed to implement variable
+            transmission rates. If the simulation time is longer than the length
+            of this list, the last rate in the list is maintained for the
+            remainder of the simulation.
         gamma : `float`
             recovery rate for an infected node
         save_history : `bool`
@@ -256,6 +264,12 @@ class Contagion():
             modeling testing
         psi : `float`
             the rate at which infected nodes become symptomatic
+        omega : `float` or `tuple`
+            handles 'duration of immunity.' omega is the rate at which recovered
+            nodes become susceptible again. if a tuple is passed, the first
+            element refers to the re-susceptibility rate of "natural" recoveries
+            (from the virus), whereas the second element refers to the
+            re-susceptibility rate from immunization
         implement_testing : `bool`
             describes whether to simulate testing of the symptomatic
             population
@@ -276,20 +290,36 @@ class Contagion():
         self.track_symptomatic = track_symptomatic
         self.implement_testing = implement_testing
         self.test_rate = test_rate
+
         if contagion_type.lower() not in ["sir"]:
             raise ValueError("Invalid contagion type provided.")
         else:
             self.contagion_type = contagion_type.lower()
+
         if 0. <= gamma <= 1.:
             # recovery rate for an infected node
             self.gamma = gamma
         else:
             raise ValueError('Gamma must be between 0 and 1.')
-        if 0. <= beta <= 1.:
+
+        if isinstance(beta, (float, int)) and 0. <= beta <= 1.:
             # infection rate for susceptible nodes
+            self.beta_queue = []
             self.beta = beta
+        elif isinstance(beta, list) \
+                and [0. <= i <= 1. for i in beta] == [True]*len(beta):
+            self.beta_queue = beta[1:]
+            self.beta = beta[0]
         else:
-            raise ValueError('Beta must be between 0 and 1.')
+            raise ValueError('Transmission rates must be between 0 and 1.')
+
+        if isinstance(omega, (float, int)) and 0. <= omega <= 1.:
+            self.omega = omega
+        elif isinstance(omega, tuple) and len(omega) == 2:
+            self.omega = omega
+        else:
+            raise ValueError('Duration of immunity specified incorrectly.')
+
         if 0. <= psi <= 1.:
             # the rate at which infected nodes become symptomatic
             self.psi = psi
@@ -386,6 +416,10 @@ class Contagion():
             (0 < new_transmissions)
             & (new_transmissions <= self.beta)
             & (self.network.Re == 0.), 1., 0.)
+
+        if self.beta_queue:
+            self.beta = self.beta_queue[0]
+            self.beta_queue = self.beta_queue[1:]
         return new_transmissions
 
     def get_new_recoveries(self):
@@ -596,7 +630,8 @@ class Contagion():
         return None
 
     def update_Re(self):
-        """Updates recovered record with new recoveries.
+        """Updates recovered record with new recoveries. Handles immunity
+        durations.
 
         Parameters
         ----------
@@ -615,10 +650,55 @@ class Contagion():
             self.network.Re += self.new_recoveries
             self.network.Re = np.where(self.network.Re > 0, 1., 0.)
 
+            if self.omega != 0:
+                random_arr = np.random.rand(self.network.n, 1)
+
+                if isinstance(self.omega, (int, float)):
+                    if self.network.im_type == "vaccinate":
+                        Re_to_Su = np.where(
+                            (self.network.Re > 0) \
+                                & (random_arr <= self.omega) \
+                                & (self.network.Im == 0),
+                            1.,
+                            0.)
+                    else:
+                        Re_to_Su = np.where(
+                            (self.network.Re > 0) \
+                                & (random_arr <= self.omega),
+                            1.,
+                            0.)
+                    self.network.Re -= Re_to_Su
+                    self.network.Su += Re_to_Su
+                elif isinstance(self.omega, tuple):
+                    # if True, then self.network.im_type == "vaccinate":
+                    Re_to_Su = np.where(
+                        (self.network.Re > 0) \
+                            & (random_arr <= self.omega[0]) \
+                            & (self.network.Im == 0),
+                        1.,
+                        0.)
+                    random_arr = np.random.rand(self.network.n, 1)
+                    Im_to_Su = np.where(
+                        (self.network.Im > 0) \
+                            & (random_arr <= self.omega[1]),
+                        1.,
+                        0.)
+                    self.network.Re -= Re_to_Su
+                    self.network.Im -= Im_to_Su
+                    self.network.Su += Re_to_Su + Im_to_Su
+
+                    self.network.Im = np.where(self.network.Im > 0, 1., 0.)
+                else:
+                    raise ValueError(
+                        'Duration of immunity specified incorrectly.')
+
             if self.save_history:
                 self.Re_hist.append(np.sum(self.network.Re))
         else:
             raise ValueError("Invalid contagion type.")
+
+        self.network.Re = np.where(self.network.Re > 0, 1., 0.)
+        self.network.Su = np.where(self.network.Su > 0, 1., 0.)
         return None
 
     def update_Sy(self):
