@@ -10,9 +10,9 @@
 
 `contagion` is designed to be easy-to-use and full-featured, supporting computer scientists, public health researchers, network theorists, and more. Here are a few things we love about `contagion`:
 
-- provides an accessible interface for incorporating node immunization into contagion simulations
-- supports immunization with delayed effect
-- handles partial immunity
+- accessible interface for incorporating node immunization into contagion simulations
+- supports immunization with delayed effect and variable immunity durations
+- handles partial immunity and time-varying transmission rates
 - can track symptom onset
 - implements node testing policies (random, contact tracing)
 
@@ -36,7 +36,7 @@ Install `contagion` with [pip](https://pypi.org/project/contagion/):
 pip install contagion
 ```
 
-Once `contagion` is installed, import `networkx` and `contagion`:
+Once `contagion` is installed, import `NetworkX` and `contagion`:
 
 ```python
 import networkx

@@ -5,7 +5,6 @@ contagion.py
 """
 
 __author__ = "Lucas McCabe"
-__version__ = "JOSS"
 
 import numpy as np
 import networkx as nx
@@ -631,7 +630,8 @@ class Contagion():
         return None
 
     def update_Re(self):
-        """Updates recovered record with new recoveries. Handles updat
+        """Updates recovered record with new recoveries. Handles immunity
+        durations.
 
         Parameters
         ----------
