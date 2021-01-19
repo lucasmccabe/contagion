@@ -4,7 +4,7 @@ Tutorial
 
 
 
-Here, we provide a quick overview of how to get up and running with contagion, once you have it installed_. To begin, start here_!
+Here, we provide a quick overview of how to get up and running with ``contagion``, once you have it installed_. To begin, start here_!
 
 
 Contents
@@ -14,8 +14,13 @@ Contents
    :maxdepth: 3
 
    tutorial_ContactNetwork
-   tutorial_Immunization
+   tutorial_immunization_policies
+   tutorial_immunization
+   tutorial_immunization_monitoring
    tutorial_simulation
+   tutorial_immunity_duration
+   tutorial_variable_transmission
+   tutorial_simulation_testing
 
 
 

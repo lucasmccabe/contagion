@@ -1,9 +1,9 @@
-==========================
-Tutorial: Contact Networks
-==========================
+================
+Contact Networks
+================
 
 
-contagion simulations run on ContactNetwork_ objects. To begin, create a NetworkX graph and initialize a ContactNetwork around it:
+``contagion`` simulations run on ContactNetwork_ objects. To begin, create a NetworkX graph and initialize a ContactNetwork around it:
 
 .. code-block:: python
 
@@ -14,7 +14,7 @@ contagion simulations run on ContactNetwork_ objects. To begin, create a Network
     net = contagion.ContactNetwork(G)
 
 
-To specify a portion of the network to be (randomly) infected and/or recovered at initialization, simply pass the desired value(s) into the ``fraction_infected`` and/or ``fraction_recovered`` parameters, respectively:
+To specify a portion of the network to be (randomly) infected and/or recovered at initialization, simply pass the desired value(s) into ``fraction_infected`` and/or ``fraction_recovered``, respectively:
 
 .. code-block:: python
 
