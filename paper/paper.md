@@ -72,8 +72,7 @@ pip install contagion
 ```
 
 Alternately, the source code may be downloaded directly from
-[GitHub](https://github.com/lucasmccabe/contagion) or [Zenodo]()
-[@zenodo].
+[GitHub](https://github.com/lucasmccabe/contagion) or Zenodo [@zenodo].
 
 After installation, `contagion` should be imported alongside `NetworkX`:
 
@@ -179,7 +178,7 @@ sim.plot_simulation(steps = 50)
 
 The resultant rendering is displayed in Figure 1D.
 
-![Illustration of sample functionality: (A) symptom development tracking, (B) post hoc retrieval of compartmental histories for simulation steps 10-14, (C) time-varying transmission rates, and (D) complex immunization protocols. \label{fig:fig1}](fig1.png)
+![Illustration of sample functionality: (A) symptom development tracking, (B) post hoc retrieval of compartmental histories for simulation steps 10-14, (C) time-varying transmission rates, and (D) complex immunization protocols. \label{fig:fig1}](fig1.PNG)
 
 
 # Documentation
