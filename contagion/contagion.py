@@ -214,7 +214,7 @@ class ContactNetwork():
                 self.efficacy = efficacy
 
                 if efficacy <= 0 or efficacy > 1:
-                    raise ValueError("Invalid immunity type.")
+                    raise ValueError("Invalid efficacy.")
             elif im_type == "monitor" and mo_thresh > 0:
                 self.Mo = Im
                 self.mo_thresh = mo_thresh
@@ -344,10 +344,6 @@ class Contagion():
 
         if save_history:
             self.init_histories()
-
-        if self.network.im_type == "vaccinate" and 0 < self.network.efficacy < 1:
-            self.Im_this_step = self.get_Im_random_filter()
-            self.network.Re += self.Im_this_step
         return None
 
     def init_histories(self):
@@ -771,7 +767,8 @@ class Contagion():
         if self.network.im_type == "vaccinate" \
                 and 0 < self.network.efficacy < 1 \
                 and len(self.In_hist) - 1 >= self.network.im_starts_after:
-            self.network.Re -= self.Im_this_step
+            if len(self.In_hist) - 1 > self.network.im_starts_after:
+                self.network.Re -= self.Im_this_step
             self.network.Re = np.where(self.network.Re >  0, 1., 0.)
             self.Im_this_step = self.get_Im_random_filter()
             self.network.Re += self.Im_this_step
@@ -921,7 +918,8 @@ class Contagion():
             plt.plot(self.In_hist, label="Infected Total")
             plt.plot(self.Sy_hist, label="Infected Symptomatic")
             infected_asymptomatic = [
-                self.In_hist[i] - self.Sy_hist[i] for i in range(steps)]
+                self.In_hist[i] - self.Sy_hist[i] \
+                for i in range(len(self.In_hist))]
             plt.plot(infected_asymptomatic, label="Infected Asymptomatic")
         else:
             plt.plot(self.In_hist, label="Infected")
