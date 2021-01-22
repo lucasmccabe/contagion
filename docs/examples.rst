@@ -14,6 +14,8 @@ Contents
 
    examples_ex1
    examples_ex2
+   examples_ex3
+   examples_ex4
 
 
 .. _contact: https://github.com/lucasmccabe/contagion#contact
