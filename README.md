@@ -16,6 +16,8 @@
 - can track symptom onset
 - implements node testing policies (random, contact tracing)
 
+[Carbon Snippet](lucasmccabe.github.com/contagion/images/carbon_snippet.png)
+
 
 ## Table of Contents
 * [Table of Contents](#table-of-contents)
