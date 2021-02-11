@@ -8,6 +8,9 @@
 
 > `contagion` is a Python package supporting node immunization and network contagion simulation
 
+![Carbon Snippet](https://raw.githubusercontent.com/lucasmccabe/contagion/master/images/carbon_snippet.png)
+
+
 `contagion` is designed to be easy-to-use and full-featured, supporting computer scientists, public health researchers, network theorists, and more. Here are a few things we love about `contagion`:
 
 - accessible interface for incorporating node immunization into contagion simulations
@@ -15,8 +18,6 @@
 - handles partial immunity and time-varying transmission rates
 - can track symptom onset
 - implements node testing policies (random, contact tracing)
-
-![Carbon Snippet](https://raw.githubusercontent.com/lucasmccabe/contagion/master/images/carbon_snippet.png)
 
 
 ## Table of Contents
