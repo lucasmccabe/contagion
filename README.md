@@ -6,12 +6,12 @@
 
 # contagion
 
-> `contagion` is a Python package supporting node immunization and network contagion simulation
+> `contagion` is a Python package for node immunization and network contagion simulation.
 
 ![Carbon Snippet](https://raw.githubusercontent.com/lucasmccabe/contagion/master/images/carbon_snippet.png)
 
 
-`contagion` is designed to be easy-to-use and full-featured, supporting computer scientists, public health researchers, network theorists, and more. Here are a few things we love about `contagion`:
+Here are a few things we love about `contagion`:
 
 - accessible interface for incorporating node immunization into contagion simulations
 - supports immunization with delayed effect and variable immunity durations
@@ -42,7 +42,7 @@ pip install contagion
 Once `contagion` is installed, import `NetworkX` and `contagion`:
 
 ```python
-import networkx
+import networkx as nx
 from contagion import contagion
 ```
 
@@ -66,13 +66,13 @@ This project was created with:
 
 ## Contributing to contagion
 
-We'd love your help! If you'd like to make an addition or improvement, please submit a [pull request](https://github.com/lucasmccabe/contagion/pulls) consisting of an atomic commit and a brief message describing your contribution. If you find something wrong, please submit a bug report to the [issue tracker](https://github.com/lucasmccabe/contagion/issues). For other questions or comments, feel free to [contact me](#citing-contagion) directly.
+We'd love your help! If you'd like to make an addition or improvement, please submit a [pull request](https://github.com/lucasmccabe/contagion/pulls) consisting of an atomic commit and a brief message describing your contribution. If you find something wrong, please submit a bug report to the [issue tracker](https://github.com/lucasmccabe/contagion/issues). For other questions or comments, feel free to [contact me](#contact) directly.
 
 Thanks for helping make `contagion` better!
 
 
 ## Contact
-- Lucas McCabe ([lucas.mccabe@jhu.edu](mailto:lucas.mccabe@jhu.edu))
+- Lucas McCabe ([email](mailto:lmccabe2@alumni.jh.edu))
 
 
 ## License
