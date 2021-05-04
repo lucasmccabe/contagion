@@ -72,7 +72,7 @@ Thanks for helping make `contagion` better!
 
 
 ## Contact
-- Lucas McCabe ([email](mailto:lmccabe2@alumni.jh.edu))
+- Lucas Hurley McCabe ([email](mailto:lucasmccabe@gwu.edu))
 
 
 ## License
