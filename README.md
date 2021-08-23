@@ -39,20 +39,26 @@ Install `contagion` with [pip](https://pypi.org/project/contagion/):
 pip install contagion
 ```
 
-Once `contagion` is installed, import `NetworkX` and `contagion`:
-
-```python
-import networkx as nx
-from contagion import contagion
-```
-
 
 ## Documentation
 Official documentation - including a [tutorial](https://contagion.readthedocs.io/en/latest/tutorial.html), [API reference](https://contagion.readthedocs.io/en/latest/apiref.html), and a few worked [examples](https://contagion.readthedocs.io/en/latest/examples.html) - is available on [Read the Docs](https://contagion.readthedocs.io).
 
 
 ## Citing contagion
-If you find `contagion` useful in your work, please use the [Zenodo](https://zenodo.org/record/3993314) software citation.
+If you find `contagion` useful in your work, please use the [Zenodo](https://zenodo.org/record/3993314) software citation:
+
+```bash
+@software{lucas_mccabe_2021_4456181,
+  author       = {Lucas McCabe},
+  title        = {lucasmccabe/contagion: v1.3.3},
+  month        = jan,
+  year         = 2021,
+  publisher    = {Zenodo},
+  version      = {v1.3.3},
+  doi          = {10.5281/zenodo.4456181},
+  url          = {https://doi.org/10.5281/zenodo.4456181}
+}
+```
 
 
 ## Requirements
@@ -67,8 +73,6 @@ This project was created with:
 ## Contributing to contagion
 
 We'd love your help! If you'd like to make an addition or improvement, please submit a [pull request](https://github.com/lucasmccabe/contagion/pulls) consisting of an atomic commit and a brief message describing your contribution. If you find something wrong, please submit a bug report to the [issue tracker](https://github.com/lucasmccabe/contagion/issues). For other questions or comments, feel free to [contact me](#contact) directly.
-
-Thanks for helping make `contagion` better!
 
 
 ## Contact
