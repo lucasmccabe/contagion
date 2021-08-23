@@ -25,9 +25,9 @@ Here are a few things we love about `contagion`:
 * [Getting Started](#getting-started)
 * [Documentation](#documentation)
 * [Example Usage](#example-usage)
-* [Citing contagion](#citing-contagion)
 * [Contributing to contagion](#contributing-to-contagion)
 * [Contact](#contact)
+* [Citing contagion](#citing-contagion)
 * [Requirements](#requirements)
 * [License](#license)
 
@@ -42,23 +42,6 @@ pip install contagion
 
 ## Documentation
 Official documentation - including a [tutorial](https://contagion.readthedocs.io/en/latest/tutorial.html), [API reference](https://contagion.readthedocs.io/en/latest/apiref.html), and a few worked [examples](https://contagion.readthedocs.io/en/latest/examples.html) - is available on [Read the Docs](https://contagion.readthedocs.io).
-
-
-## Citing contagion
-If you find `contagion` useful in your work, please use the [Zenodo](https://zenodo.org/record/3993314) software citation:
-
-```bash
-@software{lucas_mccabe_2021_4456181,
-  author       = {Lucas McCabe},
-  title        = {lucasmccabe/contagion: v1.3.3},
-  month        = jan,
-  year         = 2021,
-  publisher    = {Zenodo},
-  version      = {v1.3.3},
-  doi          = {10.5281/zenodo.4456181},
-  url          = {https://doi.org/10.5281/zenodo.4456181}
-}
-```
 
 
 ## Requirements
@@ -77,6 +60,23 @@ We'd love your help! If you'd like to make an addition or improvement, please su
 
 ## Contact
 - Lucas Hurley McCabe ([email](mailto:lucasmccabe@gwu.edu))
+
+
+## Citing contagion
+If you find `contagion` useful in your work, please use the [Zenodo](https://zenodo.org/record/3993314) software citation:
+
+```bash
+@software{lucas_mccabe_2021_4456181,
+  author       = {Lucas McCabe},
+  title        = {lucasmccabe/contagion: v1.3.3},
+  month        = jan,
+  year         = 2021,
+  publisher    = {Zenodo},
+  version      = {v1.3.3},
+  doi          = {10.5281/zenodo.4456181},
+  url          = {https://doi.org/10.5281/zenodo.4456181}
+}
+```
 
 
 ## License
