@@ -1,7 +1,8 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3993314.svg)](https://doi.org/10.5281/zenodo.3993314)
 [![PyPI version](https://badge.fury.io/py/contagion.svg)](https://badge.fury.io/py/contagion)
 [![Documentation Status](https://readthedocs.org/projects/contagion/badge/?version=latest)](https://contagion.readthedocs.io/en/latest/?badge=latest)
 [![Build Status](https://travis-ci.com/lucasmccabe/contagion.svg?branch=master)](https://travis-ci.com/lucasmccabe/contagion)
+[![Downloads](https://pepy.tech/badge/contagion)](https://pepy.tech/project/contagion)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3993314.svg)](https://doi.org/10.5281/zenodo.3993314)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
 # contagion
